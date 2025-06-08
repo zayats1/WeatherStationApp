@@ -33,12 +33,32 @@ fun Weather(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(top = 25.dp)
         )
         {
+            DateAndTimeBar(modifier = modifier)
             WeatherBar(
-                name = "Lviv 20*C Sunny",
+                name = "20*C Sunny",
                 pressure = 101.325,
                 modifier = modifier
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DateAndTimeBar(modifier: Modifier = Modifier){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+            .padding(5.dp)
+            .padding(top = 5.dp)
+            .fillMaxWidth()
+            .height(150.dp)
+    ) {
+        Text(
+            text = "Lviv 16:36  07.07.2025",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
     }
 }
 
@@ -84,7 +104,7 @@ fun WeatherBar(name: String, pressure: Double, modifier: Modifier = Modifier) {
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun WeatherPreview() {
     Surface (modifier = Modifier.padding(top = 25.dp).height(2000.dp)
@@ -92,6 +112,7 @@ fun WeatherPreview() {
         Weather(Modifier)
     }
 }
+
 
 
 @Preview(showBackground = true)
