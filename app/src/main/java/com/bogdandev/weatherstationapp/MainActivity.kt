@@ -49,8 +49,6 @@ fun Weather(modifier: Modifier = Modifier) {
     Surface(modifier = modifier) {
         Column(
             modifier = Modifier.padding(top = 25.dp)
-                .height(2000.dp)
-                .width(1080.dp)
         )
         {
             WeatherBar(
@@ -61,6 +59,7 @@ fun Weather(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
 @Composable
@@ -79,7 +78,6 @@ fun WeatherBar(name: String, pressure: Double, modifier: Modifier = Modifier) {
             text = "$name!",
             modifier = modifier.padding(end = 20.dp)
         )
-
 
         Image(
             painter = painterResource(
@@ -103,9 +101,20 @@ fun WeatherBar(name: String, pressure: Double, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+
+@Preview
 @Composable
 fun WeatherPreview() {
+    Surface (modifier = Modifier.padding(top = 25.dp).height(2000.dp)
+        .width(1080.dp)){
+        Weather(Modifier)
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun WeatherBarPreview() {
     TheAppTheme {
         WeatherBar("Lviv 20*C Sunny", 101.325)
     }
