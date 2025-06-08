@@ -35,8 +35,7 @@ fun Weather(modifier: Modifier = Modifier) {
         {
             DateAndTimeBar(modifier = modifier)
             WeatherBar(
-                name = "20*C Sunny",
-                pressure = 101.325,
+                content = "Sunny\n temp: 20*C\n humidity: 80%\n Pressure: 101.325,",
                 modifier = modifier
             )
         }
@@ -53,7 +52,7 @@ fun DateAndTimeBar(modifier: Modifier = Modifier){
             .padding(5.dp)
             .padding(top = 5.dp)
             .fillMaxWidth()
-            .height(150.dp)
+            .height(50.dp)
     ) {
         Text(
             text = "Lviv 16:36  07.07.2025",
@@ -65,19 +64,19 @@ fun DateAndTimeBar(modifier: Modifier = Modifier){
 
 
 @Composable
-fun WeatherBar(name: String, pressure: Double, modifier: Modifier = Modifier) {
+fun WeatherBar(content: String, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
-            .padding(5.dp)
+            .padding(1.dp)
             .padding(top = 5.dp)
             .fillMaxWidth()
-            .height(150.dp)
+            .height(250.dp)
     ) {
 
         Text(
-            text = "$name!",
+            text = content,
             modifier = modifier.padding(end = 20.dp)
         )
 
@@ -94,12 +93,6 @@ fun WeatherBar(name: String, pressure: Double, modifier: Modifier = Modifier) {
 
             contentDescription = null
         )
-
-        Text(
-            text = "$pressure, kpa",
-            modifier = modifier.padding(start = 10.dp, end = 20.dp)
-        )
-
     }
 }
 
@@ -119,6 +112,6 @@ fun WeatherPreview() {
 @Composable
 fun WeatherBarPreview() {
     TheAppTheme {
-        WeatherBar("Lviv 20*C Sunny", 101.325)
+        WeatherBar("Lviv 20*C Sunny")
     }
 }
