@@ -28,17 +28,18 @@ import com.bogdandev.weatherstationapp.R
 
 @Composable
 fun Weather(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier) {
+    Surface(modifier) {
         Column(
-            modifier = Modifier.padding(top = 25.dp)
+            modifier.padding(top = 25.dp)
         )
         {
-            DateAndTimeBar(modifier = modifier)
+            DateAndTimeBar(modifier)
             WeatherBar(
-                data = "Sunny\n temp: 20*C\n humidity: 80%\n Pressure: 101.325,",
+                data = "101.325 kpa,",
                 modifier = modifier
             )
-            TemperatureBar(modifier = Modifier)
+            TemperatureBar(Modifier)
+            Humidity(modifier)
         }
     }
 }
@@ -82,6 +83,30 @@ fun TemperatureBar(modifier: Modifier = Modifier){
         Image(
             painter = painterResource(
                 R.drawable.termometer_foreground
+            ),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
+
+            contentDescription = null
+        )
+    })
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun Humidity(modifier: Modifier = Modifier){
+    DisplayBar(modifier = modifier.height(150.dp), content = {
+        Text(
+            text = "80%",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Image(
+            painter = painterResource(
+                R.drawable.humidity_foreground
             ),
             contentScale = ContentScale.Crop,
             modifier = modifier
