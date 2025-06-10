@@ -48,57 +48,65 @@ fun Weather(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun WeatherPreview() {
-    Surface (modifier = Modifier.padding(top = 25.dp).height(2000.dp)
-        .width(1080.dp)){
+    Surface(
+        modifier = Modifier
+            .padding(top = 25.dp)
+            .height(2000.dp)
+            .width(1080.dp)
+    ) {
         Weather(Modifier)
     }
 }
 
 
 @Composable
-fun DisplayBar(content: @Composable RowScope.(modifier:Modifier) -> Unit, modifier: Modifier = Modifier){
-    Row (
+fun DisplayBar(
+    content: @Composable RowScope.(modifier: Modifier) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
             .padding(5.dp)
             .padding(top = 5.dp)
             .fillMaxWidth()
-            .height(150.dp)) {
-            content(modifier)
+            .height(150.dp)
+    ) {
+        content(modifier)
     }
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
-fun TemperatureBar(modifier: Modifier = Modifier){
-    DisplayBar(modifier = modifier,
+fun TemperatureBar(modifier: Modifier = Modifier) {
+    DisplayBar(
+        modifier = modifier,
         content = {
-        Text(
-            text = "20*C",
-            modifier = modifier.padding(start = 10.dp, end = 20.dp)
-        )
-        Image(
-            painter = painterResource(
-                R.drawable.termometer_foreground
-            ),
-            contentScale = ContentScale.Crop,
-            modifier = modifier
-                .size(150.dp)
-                .padding(end = 2.dp)
-                .clip(CircleShape),
+            Text(
+                text = "20*C",
+                modifier = modifier.padding(start = 10.dp, end = 20.dp)
+            )
+            Image(
+                painter = painterResource(
+                    R.drawable.termometer_foreground
+                ),
+                contentScale = ContentScale.Crop,
+                modifier = modifier
+                    .size(150.dp)
+                    .padding(end = 2.dp)
+                    .clip(CircleShape),
 
-            contentDescription = null
-        )
-    })
+                contentDescription = null
+            )
+        })
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun Humidity(modifier: Modifier = Modifier){
+fun Humidity(modifier: Modifier = Modifier) {
     DisplayBar(modifier = modifier.height(150.dp), content = {
         Text(
             text = "80%",
@@ -120,24 +128,22 @@ fun Humidity(modifier: Modifier = Modifier){
 }
 
 
-
-
 @Preview(showBackground = true)
 @Composable
-fun DateAndTimeBar(modifier: Modifier = Modifier){
-     DisplayBar(modifier = modifier.height(50.dp), content = {
-         Text(
-             text = "Lviv 16:36  07.07.2025",
-             modifier = modifier.padding(start = 10.dp, end = 20.dp)
-         )
-     })
+fun DateAndTimeBar(modifier: Modifier = Modifier) {
+    DisplayBar(modifier = modifier.height(50.dp), content = {
+        Text(
+            text = "Lviv 16:36  07.07.2025",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+    })
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun WeatherBar( modifier: Modifier = Modifier,data: String = "Lviv 20*C Sunny") {
-    DisplayBar(modifier = modifier, content =  {
+fun WeatherBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
+    DisplayBar(modifier = modifier, content = {
         Text(
             text = data,
             modifier = modifier.padding(end = 20.dp)
