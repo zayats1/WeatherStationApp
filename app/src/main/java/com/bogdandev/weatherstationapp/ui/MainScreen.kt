@@ -38,9 +38,42 @@ fun Weather(modifier: Modifier = Modifier) {
                 content = "Sunny\n temp: 20*C\n humidity: 80%\n Pressure: 101.325,",
                 modifier = modifier
             )
+            TemperatureBar(modifier = Modifier)
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun TemperatureBar(modifier: Modifier = Modifier){
+    Row (
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+        .padding(5.dp)
+        .padding(top = 5.dp)
+        .fillMaxWidth()
+        .height(150.dp)) {
+        Text(
+            text = "20*C",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Image(
+            painter = painterResource(
+                R.drawable.termometer_foreground
+            ),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
+
+            contentDescription = null
+        )
+    }
+}
+
+
 
 @Preview(showBackground = true)
 @Composable
