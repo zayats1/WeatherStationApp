@@ -22,10 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bogdandev.weatherstationapp.R
+import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 
 
 @Composable
-fun Weather(modifier: Modifier = Modifier) {
+fun Weather(modifier: Modifier = Modifier,weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel()) {
     Surface(modifier) {
         Column(
             modifier.padding(top = 25.dp)
