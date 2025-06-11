@@ -33,7 +33,7 @@ fun Weather(modifier: Modifier = Modifier) {
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                data = "101.325 kpa,",
+                data = "101.325 kPa,",
                 modifier = modifier
             )
             TemperatureBar(Modifier)
