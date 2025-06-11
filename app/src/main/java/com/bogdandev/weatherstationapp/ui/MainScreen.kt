@@ -59,8 +59,8 @@ fun WeatherPreview() {
 
 @Composable
 fun DisplayBar(
-    content: @Composable RowScope.(modifier: Modifier) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+            content: @Composable RowScope.(modifier: Modifier) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -79,9 +79,7 @@ fun DisplayBar(
 @Preview(showBackground = true)
 @Composable
 fun TemperatureBar(modifier: Modifier = Modifier) {
-    DisplayBar(
-        modifier = modifier,
-        content = {
+    DisplayBar(modifier = modifier) {
             Text(
                 text = "20*C",
                 modifier = modifier.padding(start = 10.dp, end = 20.dp)
@@ -98,14 +96,14 @@ fun TemperatureBar(modifier: Modifier = Modifier) {
 
                 contentDescription = null
             )
-        })
+        }
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun Humidity(modifier: Modifier = Modifier) {
-    DisplayBar(modifier = modifier.height(150.dp), content = {
+    DisplayBar(modifier = modifier.height(150.dp)) {
         Text(
             text = "80%",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
@@ -122,26 +120,26 @@ fun Humidity(modifier: Modifier = Modifier) {
 
             contentDescription = null
         )
-    })
+    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun DateAndTimeBar(modifier: Modifier = Modifier) {
-    DisplayBar(modifier = modifier.height(50.dp), content = {
+    DisplayBar(modifier = modifier.height(50.dp)) {
         Text(
             text = "Lviv 16:36  07.07.2025",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
-    })
+    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
 fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
-    DisplayBar(modifier = modifier, content = {
+    DisplayBar(modifier = modifier) {
         Text(
             text = data,
             modifier = modifier.padding(end = 20.dp)
@@ -159,7 +157,7 @@ fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny")
 
             contentDescription = null
         )
-    })
+    }
 }
 
 
