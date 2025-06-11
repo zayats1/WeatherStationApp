@@ -8,4 +8,8 @@ import androidx.lifecycle.ViewModel
 
 class WeatherStationViewModel: ViewModel() {
       var weatherInfo by mutableStateOf(WeatherInfo())
+
+    fun fetchWeatherInfo(){
+
+    }
 }
