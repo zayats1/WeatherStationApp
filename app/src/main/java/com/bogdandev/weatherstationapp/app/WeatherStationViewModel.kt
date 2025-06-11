@@ -1,6 +1,5 @@
 package com.bogdandev.weatherstationapp.app
 
-import android.util.Half
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
