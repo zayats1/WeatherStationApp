@@ -88,9 +88,9 @@ fun TemperatureBar(modifier: Modifier = Modifier) {
             )
             Image(
                 painter = painterResource(
-                    R.drawable.termometer_foreground
+                    R.drawable.thermometer_foreground
                 ),
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillBounds,
                 modifier = modifier
                     .size(150.dp)
                     .padding(end = 2.dp)
@@ -114,7 +114,7 @@ fun Humidity(modifier: Modifier = Modifier) {
             painter = painterResource(
                 R.drawable.humidity_foreground
             ),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             modifier = modifier
                 .size(150.dp)
                 .padding(end = 2.dp)
@@ -149,9 +149,9 @@ fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny")
 
         Image(
             painter = painterResource(
-                R.drawable.pressure
+                R.drawable.pressure_foreground
             ),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.FillBounds,
             modifier = modifier
                 .size(150.dp)
                 .padding(end = 2.dp)
