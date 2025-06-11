@@ -79,7 +79,7 @@ fun DisplayBar(
 @Preview(showBackground = true)
 @Composable
 fun TemperatureBar(modifier: Modifier = Modifier) {
-    DisplayBar(modifier = modifier) {
+    DisplayBar(modifier) {
             Text(
                 text = "20*C",
                 modifier = modifier.padding(start = 10.dp, end = 20.dp)
@@ -139,7 +139,7 @@ fun DateAndTimeBar(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
-    DisplayBar(modifier = modifier) {
+    DisplayBar(modifier) {
         Text(
             text = data,
             modifier = modifier.padding(end = 20.dp)
