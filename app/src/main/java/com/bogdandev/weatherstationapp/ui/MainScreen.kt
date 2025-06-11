@@ -1,7 +1,6 @@
 package com.bogdandev.weatherstationapp.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +32,7 @@ fun Weather(modifier: Modifier = Modifier) {
         )
         {
             DateAndTimeBar(modifier)
-            WeatherBar(
+            PressureBar(
                 data = "101.325 kpa,",
                 modifier = modifier
             )
@@ -142,7 +140,7 @@ fun DateAndTimeBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun WeatherBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
+fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
     DisplayBar(modifier = modifier, content = {
         Text(
             text = data,
@@ -151,14 +149,13 @@ fun WeatherBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") 
 
         Image(
             painter = painterResource(
-                R.drawable.sun_foreground
+                R.drawable.pressure
             ),
             contentScale = ContentScale.Crop,
             modifier = modifier
-                .size(80.dp)
+                .size(150.dp)
                 .padding(end = 2.dp)
-                .clip(CircleShape)
-                .background(Color(0xFF37AAE5)),
+                .clip(CircleShape),
 
             contentDescription = null
         )
