@@ -28,15 +28,15 @@ class WeatherStationViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-           fetchWeatherInfo()
+           fetchWeatherInfo(URL)
         }
     }
 
-    private suspend fun fetchWeatherInfo() {
+    private suspend fun fetchWeatherInfo(url: String) {
 
         while (isActive) {
             _weatherInfo.value = WeatherInfo()  //todo
-            val response = client.get(URL)
+            val response = client.get(url)
             Log.i("fetchWeatherInfo response",response.toString())
             Log.i("fetchWeatherInfo content",response.bodyAsText())
             delay(REQUEST_INTERVAL_MS)
