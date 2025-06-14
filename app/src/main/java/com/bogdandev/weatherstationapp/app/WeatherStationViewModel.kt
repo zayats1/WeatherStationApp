@@ -7,6 +7,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.net.SocketException
 import kotlin.math.log
 
 const val REQUEST_INTERVAL_MS:Long  =  10_000L
@@ -43,8 +45,14 @@ class WeatherStationViewModel : ViewModel() {
                 Log.i("fetchWeatherInfo response", response.toString())
                 Log.i("fetchWeatherInfo content", response.bodyAsText())
                 delay(REQUEST_INTERVAL_MS)
-            } catch (e: ConnectTimeoutException){
+            } catch (e: ConnectTimeoutException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking wifi")
+                Log.e("fetchWeatherInfo", e.toString())
+            } catch (e: SocketTimeoutException) {
+                Log.i("fetchWeatherInfo", "Connect the freaking wifi!!!")
+                Log.e("fetchWeatherInfo", e.toString())
+            } catch (e: SocketException) {
+                Log.i("fetchWeatherInfo", "Connect the freaking wifi!!!")
                 Log.e("fetchWeatherInfo", e.toString())
             }
         }
