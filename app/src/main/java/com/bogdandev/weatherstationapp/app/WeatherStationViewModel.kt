@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
@@ -15,6 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.math.log
 
 const val REQUEST_INTERVAL_MS:Long  =  10_000L
 const val URL: String =  "http://192.168.1.1/" // TODO url selector
@@ -35,11 +37,16 @@ class WeatherStationViewModel : ViewModel() {
     private suspend fun fetchWeatherInfo(url: String) {
 
         while (isActive) {
-            _weatherInfo.value = WeatherInfo()  //todo
-            val response = client.get(url)
-            Log.i("fetchWeatherInfo response",response.toString())
-            Log.i("fetchWeatherInfo content",response.bodyAsText())
-            delay(REQUEST_INTERVAL_MS)
+            try {
+                _weatherInfo.value = WeatherInfo()  //todo
+                val response = client.get(url)
+                Log.i("fetchWeatherInfo response", response.toString())
+                Log.i("fetchWeatherInfo content", response.bodyAsText())
+                delay(REQUEST_INTERVAL_MS)
+            } catch (e: ConnectTimeoutException){
+                Log.i("fetchWeatherInfo", "Connect the freaking wifi")
+                Log.e("fetchWeatherInfo", e.toString())
+            }
         }
     }
 }
