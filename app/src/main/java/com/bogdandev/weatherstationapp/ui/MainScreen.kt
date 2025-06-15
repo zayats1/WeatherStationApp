@@ -1,5 +1,6 @@
 package com.bogdandev.weatherstationapp.ui
 
+import android.net.Network
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,9 +36,10 @@ import java.util.Date
 @Composable
 fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
+    val isConnected by model.isConnected.collectAsStateWithLifecycle()
     Surface(modifier) {
         Column(
-            modifier.padding(top = 25.dp)
+            modifier.padding(top = 45.dp)
         )
         {
             DateAndTimeBar(modifier)
@@ -49,7 +53,35 @@ fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = Weath
             Humidity(
                 humidity = weatherInfo.humidity,
                 modifier = modifier)
+            NetworkStatus(
+               isConnected = isConnected,
+                modifier = modifier)
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NetworkStatus(modifier: Modifier = Modifier, isConnected: Boolean = false){
+    DisplayBar(modifier) {
+        Text(
+            text = if (isConnected) {"Connected"} else {"Connect to the station!"},
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Icon(
+            painter = painterResource(
+                R.drawable.network_status_foreground
+            ),
+            tint = if (isConnected) {Color.Green} else {
+                Color.Red
+            },
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
+
+            contentDescription = null
+        )
     }
 }
 
