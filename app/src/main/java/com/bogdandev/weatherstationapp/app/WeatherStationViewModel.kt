@@ -25,7 +25,7 @@ import java.net.ConnectException
 import java.net.SocketException
 import kotlin.math.log
 
-const val TIMEOUT_MS:Long  =  5000L
+const val TIMEOUT_MS:Long  =  10000L
 const val REQUEST_INTERVAL_MS:Long  =  100L
 const val URL: String =  "http://192.168.1.1/" // TODO url selector
 
@@ -50,6 +50,7 @@ class WeatherStationViewModel : ViewModel() {
                     timeout {
                         requestTimeoutMillis =TIMEOUT_MS
                     }
+
                 }
                 val responseBody = response.bodyAsText()
                 Log.d("fetchWeatherInfo response", response.toString())
