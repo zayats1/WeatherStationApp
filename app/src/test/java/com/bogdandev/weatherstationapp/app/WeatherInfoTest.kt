@@ -8,7 +8,7 @@ const val TOLERANCE: Double = 1e-5
 class WeatherInfoTest {
     private val weatherInfo = WeatherInfo(
         pressure = 101.325,
-        humidity = 0.80,
+        humidity = 80.0,
         temperature = 20.0
     )
 
