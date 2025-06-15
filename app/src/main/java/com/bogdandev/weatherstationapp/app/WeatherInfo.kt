@@ -1,6 +1,8 @@
 package com.bogdandev.weatherstationapp.app
 
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class WeatherInfo(
     val pressure:Double = 0.0,
     val humidity: Double = 0.0,
