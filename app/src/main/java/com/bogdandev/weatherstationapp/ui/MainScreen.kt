@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import java.util.Calendar
@@ -30,8 +32,8 @@ import java.util.Date
 
 @Composable
 fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
+    val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     Surface(modifier) {
-        val weatherInfo  = model.weatherInfo.collectAsState().value;
         Column(
             modifier.padding(top = 25.dp)
         )
@@ -117,7 +119,7 @@ fun TemperatureBar(modifier: Modifier = Modifier,
 fun Humidity(modifier: Modifier = Modifier, humidity:Double = 0.0) {
     DisplayBar(modifier = modifier.height(150.dp)) {
         Text(
-            text = humidity.toString(),
+            text = "$humidity%",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
         Image(
