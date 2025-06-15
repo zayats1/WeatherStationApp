@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,22 +24,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
+import java.util.Calendar
+import java.util.Date
 
 
 @Composable
-fun Weather(modifier: Modifier = Modifier,weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel()) {
+fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
     Surface(modifier) {
+        val weatherInfo  = model.weatherInfo.collectAsState().value;
         Column(
             modifier.padding(top = 25.dp)
         )
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                data = "101.325 kPa,",
+                pressure =weatherInfo.pressure ,
                 modifier = modifier
             )
-            TemperatureBar(Modifier)
-            Humidity(modifier)
+            TemperatureBar(
+                temperature = weatherInfo.temperature,
+                modifier = modifier)
+            Humidity(
+                humidity = weatherInfo.humidity,
+                modifier = modifier)
         }
     }
 }
@@ -46,7 +54,7 @@ fun Weather(modifier: Modifier = Modifier,weatherStationViewModel: WeatherStatio
 
 @Preview(showBackground = true)
 @Composable
-fun WeatherPreview() {
+fun WeatherPreview(weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel()) {
     Surface(
         modifier = Modifier
             .padding(top = 25.dp)
@@ -61,6 +69,7 @@ fun WeatherPreview() {
 @Composable
 fun DisplayBar(
     modifier: Modifier = Modifier,
+    weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel(),
             content: @Composable RowScope.(modifier: Modifier) -> Unit
 ) {
     Row(
@@ -79,10 +88,12 @@ fun DisplayBar(
 
 @Preview(showBackground = true)
 @Composable
-fun TemperatureBar(modifier: Modifier = Modifier) {
+fun TemperatureBar(modifier: Modifier = Modifier,
+        temperature:Double = 0.0) {
     DisplayBar(modifier) {
+
             Text(
-                text = "20*C",
+                text = "$temperature *C",
                 modifier = modifier.padding(start = 10.dp, end = 20.dp)
             )
             Image(
@@ -103,10 +114,10 @@ fun TemperatureBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun Humidity(modifier: Modifier = Modifier) {
+fun Humidity(modifier: Modifier = Modifier, humidity:Double = 0.0) {
     DisplayBar(modifier = modifier.height(150.dp)) {
         Text(
-            text = "80%",
+            text = humidity.toString(),
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
         Image(
@@ -129,8 +140,9 @@ fun Humidity(modifier: Modifier = Modifier) {
 @Composable
 fun DateAndTimeBar(modifier: Modifier = Modifier) {
     DisplayBar(modifier = modifier.height(50.dp)) {
+        val currentTime: Date = Calendar.getInstance().time
         Text(
-            text = "Lviv 16:36  07.07.2025",
+            text = "$currentTime",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
     }
@@ -139,10 +151,10 @@ fun DateAndTimeBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PressureBar(modifier: Modifier = Modifier, data: String = "Lviv 20*C Sunny") {
+fun PressureBar(modifier: Modifier = Modifier, pressure: Double = 101.315) {
     DisplayBar(modifier) {
         Text(
-            text = data,
+            text = "$pressure kPa",
             modifier = modifier.padding(end = 20.dp)
         )
 

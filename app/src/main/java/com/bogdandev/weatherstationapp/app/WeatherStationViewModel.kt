@@ -32,7 +32,6 @@ class WeatherStationViewModel : ViewModel() {
     private var _weatherInfo = MutableStateFlow(WeatherInfo())
     var weatherInfo = _weatherInfo.asStateFlow()
 
-
     init {
         viewModelScope.launch {
            fetchWeatherInfo(URL)
