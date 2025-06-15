@@ -9,6 +9,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
@@ -20,10 +21,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import java.net.ConnectException
 import java.net.SocketException
 import kotlin.math.log
 
-const val TIMEOUT_MS:Long  =  1000L
+const val TIMEOUT_MS:Long  =  5000L
 const val REQUEST_INTERVAL_MS:Long  =  100L
 const val URL: String =  "http://192.168.1.1/" // TODO url selector
 
@@ -44,7 +46,11 @@ class WeatherStationViewModel : ViewModel() {
         while (isActive) {
             try {
                 //todo
-                val response = client.get(url)
+                val response = client.get(url) {
+                    timeout {
+                        requestTimeoutMillis =TIMEOUT_MS
+                    }
+                }
                 val responseBody = response.bodyAsText()
                 Log.d("fetchWeatherInfo response", response.toString())
                 Log.d("fetchWeatherInfo content", responseBody)
@@ -59,7 +65,9 @@ class WeatherStationViewModel : ViewModel() {
                 } catch (e:IllegalArgumentException){
                     Log.w("fetchWeatherInfo json",e.toString())
                 }
-
+            } catch (e: ConnectException) {
+                Log.i("fetchWeatherInfo", "Connect the freaking station")
+                Log.e("fetchWeatherInfo", e.toString())
             } catch (e: ConnectTimeoutException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station")
                 Log.e("fetchWeatherInfo", e.toString())
@@ -71,12 +79,13 @@ class WeatherStationViewModel : ViewModel() {
             } catch (e: SocketException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station!!!")
                 Log.e("fetchWeatherInfo", e.toString())
-                delay(TIMEOUT_MS)
             }catch(e : HttpRequestTimeoutException){
                 Log.i("fetchWeatherInfo", "Slow slime!!!")
                 Log.e("fetchWeatherInfo", e.toString())
-                delay(TIMEOUT_MS)
-            } finally {
+            } catch(e : Exception){
+            Log.wtf("fetchWeatherInfo", "I don't know !!!")
+            Log.e("fetchWeatherInfo", e.toString())
+        }  finally {
                 delay(REQUEST_INTERVAL_MS)
             }
         }
