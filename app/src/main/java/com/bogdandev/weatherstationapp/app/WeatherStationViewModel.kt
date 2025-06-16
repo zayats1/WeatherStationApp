@@ -57,7 +57,6 @@ class WeatherStationViewModel : ViewModel() {
                 Log.d("fetchWeatherInfo response", response.toString())
                 Log.d("fetchWeatherInfo content", responseBody)
                 try {
-
                     this._weatherInfo.value = Json.decodeFromString<WeatherInfo>(responseBody)
                     Log.d("fetchWeatherInfo JSON", this._weatherInfo.value.toString())
 
@@ -72,7 +71,7 @@ class WeatherStationViewModel : ViewModel() {
             }
             } catch (e: ConnectException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station")
-                Log.e("fetchWeatherInfo", e.toString())
+                Log.e("fetchWeatherInfo", e.toString())   // weather station sends data asynchronously, so it can throw the exception
             } catch (e: ConnectTimeoutException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station")
                 Log.e("fetchWeatherInfo", e.toString())
