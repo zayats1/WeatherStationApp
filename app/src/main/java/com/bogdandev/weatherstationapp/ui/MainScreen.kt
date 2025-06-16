@@ -45,6 +45,7 @@ fun Weather(
         Triple (weatherInfo.toImperial(),"*F","atm")
     }
 
+    fun roundIt(value: Double): String = "%.3f".format(value)
 
     Surface(modifier) {
         Column(
@@ -53,15 +54,15 @@ fun Weather(
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                pressure = info.pressure.toString() + pressureUnit,
+                pressure =  roundIt(info.pressure).toString() + pressureUnit,
                 modifier = modifier
             )
             TemperatureBar(
-                temperature = info.temperature.toString() + tempUnit,
+                temperature =  roundIt(info.temperature).toString() + tempUnit,
                 modifier = modifier
             )
             Humidity(
-                humidity = info.humidity,
+                humidity =  roundIt(info.humidity)+ "%",
                 modifier = modifier
             )
             NetworkStatus(
@@ -195,10 +196,10 @@ fun TemperatureBar(
 
 @Preview(showBackground = true)
 @Composable
-fun Humidity(modifier: Modifier = Modifier, humidity: Double = 0.0) {
+fun Humidity(modifier: Modifier = Modifier, humidity: String = "0.0%") {
     DisplayBar(modifier = modifier.height(150.dp)) {
         Text(
-            text = "$humidity%",
+            text = humidity,
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
         Image(
