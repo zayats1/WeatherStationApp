@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import java.util.Calendar
@@ -34,7 +35,7 @@ import java.util.Date
 fun Weather(
     modifier: Modifier = Modifier,
     model: WeatherStationViewModel = WeatherStationViewModel(),
-    navController: NavController?,
+    navController: NavController = rememberNavController(),
 ) {
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
@@ -82,7 +83,7 @@ fun Weather(
 @Composable
 fun Settings(
     modifier: Modifier = Modifier,
-    navController: NavController? = null,
+    navController: NavController = rememberNavController(),
 ) {
     DisplayBar(modifier) {
         Text(
@@ -103,7 +104,7 @@ fun Settings(
                 containerColor = Color.Transparent,
             ),
             onClick = {
-             navController!!.navigate(Screen.SETTINGS.toString())
+             navController.navigate(Screen.SETTINGS.toString())
             }
         ) {
             Image(
@@ -159,8 +160,7 @@ fun WeatherPreview() {
             .width(1080.dp)
     ) {
         Weather(
-             modifier =  Modifier,
-            navController = null
+             modifier =  Modifier
         )
     }
 }

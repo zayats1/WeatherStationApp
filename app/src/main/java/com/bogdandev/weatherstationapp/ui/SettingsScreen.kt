@@ -24,20 +24,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel(),
-                   navController: NavController? = null) {
+                   navController: NavController = rememberNavController()) {
     Surface(modifier) {
         Column(
             modifier.padding(top = 45.dp)
         ) {
           SelectUnits(
               modifier = modifier,
-              navController = navController,
               model = model
           )
             GoBack(
@@ -56,14 +56,14 @@ fun SettingsPreview() {
             .height(2000.dp)
             .width(1080.dp)
     ) {
-        SettingsScreen(modifier = Modifier,navController = null)
+        SettingsScreen(modifier = Modifier)
     }
 }
 
 
 @Preview
 @Composable
-fun SelectUnits(modifier: Modifier = Modifier,navController: NavController? = null,model: WeatherStationViewModel = WeatherStationViewModel()) {
+fun SelectUnits(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
     val isSi by model.isSi.collectAsStateWithLifecycle()
     DisplayBar(modifier = modifier) {
         Text(
@@ -130,14 +130,14 @@ fun SelectUnits(modifier: Modifier = Modifier,navController: NavController? = nu
 
 @Preview
 @Composable
-fun GoBack(modifier: Modifier = Modifier,navController: NavController? = null){
+fun GoBack(modifier: Modifier = Modifier,navController: NavController = rememberNavController()){
     DisplayBar (modifier = modifier) {
         Text(
             text = "Return!",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
         Button(onClick = {
-            navController!!.navigate(Screen.MAIN.toString())
+            navController.navigate(Screen.MAIN.toString())
         },
             modifier = modifier
                 .size(150.dp)
