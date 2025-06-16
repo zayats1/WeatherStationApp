@@ -28,15 +28,26 @@ class WeatherStationViewModel : ViewModel() {
     private var isActive = true
     private val client = HttpClient(CIO)
     private var _weatherInfo = MutableStateFlow(WeatherInfo())
-    var weatherInfo = _weatherInfo.asStateFlow()
+    val  weatherInfo = _weatherInfo.asStateFlow()
     private var _isConnected = MutableStateFlow(false)
-    var isConnected = _isConnected.asStateFlow()
+    val isConnected = _isConnected.asStateFlow()
+    private var _isSI = MutableStateFlow(true)
+    val isSi = _isSI.asStateFlow()
 
     init {
         viewModelScope.launch {
             fetchWeatherInfo(URL)
         }
     }
+
+    fun selectSi() {
+        _isSI.value = true
+    }
+
+    fun selectImperial() {
+        _isSI.value = false
+    }
+
 
     private suspend fun fetchWeatherInfo(url: String) {
         _weatherInfo.value = WeatherInfo()
@@ -51,7 +62,7 @@ class WeatherStationViewModel : ViewModel() {
 
                 }
                 val responseBody = response.bodyAsText()
-                if (!responseBody.isEmpty()){
+                if (!responseBody.isEmpty()) {
                     isConnected = true
                 }
                 Log.d("fetchWeatherInfo response", response.toString())
@@ -65,13 +76,15 @@ class WeatherStationViewModel : ViewModel() {
 
                 } catch (e: IllegalArgumentException) {
                     Log.w("fetchWeatherInfo json", e.toString())
+                } catch (e: NullPointerException) {
+                    Log.w("fetchWeatherInfo json", e.toString())
                 }
-                catch (e: NullPointerException) {
-                Log.w("fetchWeatherInfo json", e.toString())
-            }
             } catch (e: ConnectException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station")
-                Log.e("fetchWeatherInfo", e.toString())   // weather station sends data asynchronously, so it can throw the exception
+                Log.e(
+                    "fetchWeatherInfo",
+                    e.toString()
+                )   // weather station sends data asynchronously, so it can throw the exception
             } catch (e: ConnectTimeoutException) {
                 Log.i("fetchWeatherInfo", "Connect the freaking station")
                 Log.e("fetchWeatherInfo", e.toString())
@@ -87,14 +100,14 @@ class WeatherStationViewModel : ViewModel() {
             } catch (e: HttpRequestTimeoutException) {
                 Log.i("fetchWeatherInfo", "Slow slime!!!")
                 Log.e("fetchWeatherInfo", e.toString())
-                isConnected= false
+                isConnected = false
             } catch (e: Exception) {
                 Log.wtf("fetchWeatherInfo", "I don't know !!!")
                 Log.e("fetchWeatherInfo", e.toString())
-                isConnected= false
+                isConnected = false
             } finally {
                 delay(REQUEST_INTERVAL_MS)
-               _isConnected.value = isConnected
+                _isConnected.value = isConnected
             }
         }
     }

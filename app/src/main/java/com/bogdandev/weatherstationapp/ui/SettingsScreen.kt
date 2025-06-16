@@ -1,0 +1,172 @@
+package com.bogdandev.weatherstationapp.ui
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import com.bogdandev.weatherstationapp.R
+import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
+
+@Preview(showBackground = true)
+@Composable
+fun SettingsScreen(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel(),
+                   navController: NavController? = null) {
+    Surface(modifier) {
+        Column(
+            modifier.padding(top = 45.dp)
+        ) {
+          SelectUnits(
+              modifier = modifier,
+              navController = navController,
+              model = model
+          )
+            GoBack(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun SettingsPreview() {
+    Surface(
+        modifier = Modifier
+            .padding(top = 25.dp)
+            .height(2000.dp)
+            .width(1080.dp)
+    ) {
+        SettingsScreen(modifier = Modifier,navController = null)
+    }
+}
+
+
+@Preview
+@Composable
+fun SelectUnits(modifier: Modifier = Modifier,navController: NavController? = null,model: WeatherStationViewModel = WeatherStationViewModel()) {
+    val isSi by model.isSi.collectAsStateWithLifecycle()
+    DisplayBar(modifier = modifier) {
+        Text(
+            text = "Select units!",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        IconButton(
+            onClick = {
+                model.selectSi()
+            },
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape)
+        )
+        {
+            Icon(
+                painter = painterResource(
+                    R.drawable.celsius_foreground
+                ),
+                tint = if (isSi) {
+                    Color.Green
+                } else {
+                    Color.Red
+                },
+
+
+                contentDescription = null
+            )
+        }
+        IconButton(
+            onClick = {
+                model.selectImperial()
+            },
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape)
+
+        ) {
+            Icon(
+                painter = painterResource(
+                    R.drawable.fahrenheit_foreground
+                ),
+                tint = if (!isSi) {
+                    Color.Green
+                } else {
+                    Color.Red
+                },
+                modifier = modifier
+                    .size(150.dp)
+                    .padding(end = 2.dp)
+                    .clip(CircleShape),
+
+                contentDescription = null
+            )
+        }
+    }
+}
+
+
+
+
+
+@Preview
+@Composable
+fun GoBack(modifier: Modifier = Modifier,navController: NavController? = null){
+    DisplayBar (modifier = modifier) {
+        Text(
+            text = "Return!",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Button(onClick = {
+            navController!!.navigate(Screen.MAIN.toString())
+        },
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
+            colors = ButtonColors(
+                contentColor = Color.Magenta,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                containerColor = Color.Transparent,
+            ),
+
+        ) {
+            Image(
+                painter = painterResource(
+                    R.drawable.sun_foreground
+                ),
+                modifier = modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .background(Color.Blue)
+                    .padding(end = 2.dp),
+
+
+                contentDescription = null
+            )
+        }
+    }
+}
+
+
+

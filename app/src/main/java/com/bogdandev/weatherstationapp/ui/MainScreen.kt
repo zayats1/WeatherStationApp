@@ -1,24 +1,18 @@
 package com.bogdandev.weatherstationapp.ui
-
-import android.net.Network
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,16 +21,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import java.util.Calendar
 import java.util.Date
 
 
+
+
 @Composable
-fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
+fun Weather(
+    modifier: Modifier = Modifier,
+    model: WeatherStationViewModel = WeatherStationViewModel(),
+    navController: NavController?,
+) {
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
+    val isSi by model.isSi.collectAsStateWithLifecycle()
+    val (info,tempUnit,pressureUnit )= if (isSi) {
+        Triple (weatherInfo.toSI(),"*C","kPa")
+    } else {
+        Triple (weatherInfo.toImperial(),"*F","atm")
+    }
+
+
     Surface(modifier) {
         Column(
             modifier.padding(top = 45.dp)
@@ -44,35 +53,88 @@ fun Weather(modifier: Modifier = Modifier,model: WeatherStationViewModel = Weath
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                pressure =weatherInfo.pressure ,
+                pressure = info.pressure.toString() + pressureUnit,
                 modifier = modifier
             )
             TemperatureBar(
-                temperature = weatherInfo.temperature,
-                modifier = modifier)
+                temperature = info.temperature.toString() + tempUnit,
+                modifier = modifier
+            )
             Humidity(
-                humidity = weatherInfo.humidity,
-                modifier = modifier)
+                humidity = info.humidity,
+                modifier = modifier
+            )
             NetworkStatus(
-               isConnected = isConnected,
-                modifier = modifier)
+                isConnected = isConnected,
+                modifier = modifier
+            )
+          Settings(
+              navController = navController,
+              modifier = modifier
+          )
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun NetworkStatus(modifier: Modifier = Modifier, isConnected: Boolean = false){
+fun Settings(
+    modifier: Modifier = Modifier,
+    navController: NavController? = null,
+) {
     DisplayBar(modifier) {
         Text(
-            text = if (isConnected) {"Connected"} else {"Connect to the station!"},
+            text = "Settings",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Button(
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape)
+
+            ,
+            colors = ButtonColors(
+                contentColor = Color.Magenta,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+                containerColor = Color.Transparent,
+            ),
+            onClick = {
+             navController!!.navigate(Screen.SETTINGS.toString())
+            }
+        ) {
+            Image(
+                painter = painterResource(
+                    R.drawable.settings_foreground
+                ),
+                contentDescription = null
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun NetworkStatus(modifier: Modifier = Modifier, isConnected: Boolean = false) {
+    DisplayBar(modifier) {
+        Text(
+            text = if (isConnected) {
+                "Connected"
+            } else {
+                "Connect to the station!"
+            },
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
         Icon(
             painter = painterResource(
                 R.drawable.network_status_foreground
             ),
-            tint = if (isConnected) {Color.Green} else {
+            tint = if (isConnected) {
+                Color.Green
+            } else {
                 Color.Red
             },
             modifier = modifier
@@ -88,67 +150,52 @@ fun NetworkStatus(modifier: Modifier = Modifier, isConnected: Boolean = false){
 
 @Preview(showBackground = true)
 @Composable
-fun WeatherPreview(weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel()) {
+fun WeatherPreview() {
     Surface(
         modifier = Modifier
             .padding(top = 25.dp)
             .height(2000.dp)
             .width(1080.dp)
     ) {
-        Weather(Modifier)
-    }
-}
-
-
-@Composable
-fun DisplayBar(
-    modifier: Modifier = Modifier,
-    weatherStationViewModel: WeatherStationViewModel = WeatherStationViewModel(),
-            content: @Composable RowScope.(modifier: Modifier) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
-        modifier = modifier
-            .padding(5.dp)
-            .padding(top = 5.dp)
-            .fillMaxWidth()
-            .height(150.dp)
-    ) {
-        content(modifier)
+        Weather(
+             modifier =  Modifier,
+            navController = null
+        )
     }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun TemperatureBar(modifier: Modifier = Modifier,
-        temperature:Double = 0.0) {
+fun TemperatureBar(
+    modifier: Modifier = Modifier,
+    temperature: String= "0*C"
+) {
     DisplayBar(modifier) {
 
-            Text(
-                text = "$temperature *C",
-                modifier = modifier.padding(start = 10.dp, end = 20.dp)
-            )
-            Image(
-                painter = painterResource(
-                    R.drawable.thermometer_foreground
-                ),
-                contentScale = ContentScale.FillBounds,
-                modifier = modifier
-                    .size(150.dp)
-                    .padding(end = 2.dp)
-                    .clip(CircleShape),
+        Text(
+            text = temperature,
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+        Image(
+            painter = painterResource(
+                R.drawable.thermometer_foreground
+            ),
+            contentScale = ContentScale.FillBounds,
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
 
-                contentDescription = null
-            )
-        }
+            contentDescription = null
+        )
+    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun Humidity(modifier: Modifier = Modifier, humidity:Double = 0.0) {
+fun Humidity(modifier: Modifier = Modifier, humidity: Double = 0.0) {
     DisplayBar(modifier = modifier.height(150.dp)) {
         Text(
             text = "$humidity%",
@@ -185,10 +232,10 @@ fun DateAndTimeBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PressureBar(modifier: Modifier = Modifier, pressure: Double = 101.315) {
+fun PressureBar(modifier: Modifier = Modifier, pressure:String = "0kPa") {
     DisplayBar(modifier) {
         Text(
-            text = "$pressure kPa",
+            text = pressure,
             modifier = modifier.padding(end = 20.dp)
         )
 
