@@ -63,4 +63,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    //noinspection UseTomlInstead
+    implementation("com.h2database:h2:2.2.224")
 }

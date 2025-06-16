@@ -16,8 +16,9 @@ import com.bogdandev.weatherstationapp.ui.SettingsScreen
 import com.bogdandev.weatherstationapp.ui.Weather
 import com.bogdandev.weatherstationapp.ui.theme.TheAppTheme
 
-
+import org.jetbrains.exposed.v1.jdbc.Database
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
