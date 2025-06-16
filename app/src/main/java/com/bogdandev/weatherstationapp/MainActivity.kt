@@ -21,9 +21,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val model = WeatherStationViewModel()
         setContent {
             val navController = rememberNavController()
-            val model:WeatherStationViewModel = WeatherStationViewModel();
             TheAppTheme {
             NavHost(
                 navController= navController,
