@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val model = WeatherStationViewModel()
+        Database.connect("jdbc:h2:data", driver = "org.h2.Driver")
         setContent {
             val navController = rememberNavController()
             TheAppTheme {
