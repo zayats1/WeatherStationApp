@@ -8,24 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
 import com.bogdandev.weatherstationapp.ui.Screen
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import com.bogdandev.weatherstationapp.ui.SettingsScreen
-
 import com.bogdandev.weatherstationapp.ui.Weather
 import com.bogdandev.weatherstationapp.ui.theme.TheAppTheme
 
-import org.jetbrains.exposed.v1.jdbc.Database
-class MainActivity : ComponentActivity() {
 
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val model = WeatherStationViewModel()
-        Database.connect("jdbc:h2:data", driver = "org.h2.Driver")
+
         setContent {
             val navController = rememberNavController()
+
             TheAppTheme {
             NavHost(
                 navController= navController,

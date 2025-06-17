@@ -22,7 +22,8 @@ import java.net.SocketException
 
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
-const val URL: String = "http://192.168.1.1/" // TODO url selector
+const val IP:String = "192.168.1.1"
+const val URL: String = "http://$IP/" // TODO url selector
 
 class WeatherStationViewModel : ViewModel() {
     private var isActive = true
