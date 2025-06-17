@@ -24,6 +24,7 @@ class MainActivity : ComponentActivity() {
         val model = WeatherStationViewModel()
         setContent {
             val navController = rememberNavController()
+
             TheAppTheme {
             NavHost(
                 navController= navController,
