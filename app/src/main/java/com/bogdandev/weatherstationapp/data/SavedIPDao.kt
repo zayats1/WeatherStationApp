@@ -15,3 +15,4 @@ interface SavedIPDao {
     @Delete
     fun delete(ipaddr: SavedIP)
 }
+
