@@ -40,6 +40,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,model: WeatherStationViewModel 
               modifier = modifier,
               model = model
           )
+            ConnectionInfo(modifier=modifier,model=model)
             GoBack(
                 modifier = modifier,
                 navController = navController
@@ -168,5 +169,19 @@ fun GoBack(modifier: Modifier = Modifier,navController: NavController = remember
     }
 }
 
-
+@Preview
+@Composable
+fun ConnectionInfo(modifier: Modifier = Modifier,navController: NavController = rememberNavController(),model: WeatherStationViewModel = WeatherStationViewModel()) {
+    val info = model.savedIP.collectAsStateWithLifecycle().value;
+    DisplayBar(modifier = modifier) {
+        Text(
+            text = "Connection info:",
+            modifier = modifier.padding(start = 10.dp, end = 2.dp)
+        )
+        Text(
+            text = "ssid:${info.ssid}\nip address:${info.ipaddr}",
+            modifier = modifier.padding(start = 10.dp, end = 20.dp)
+        )
+    }
+}
 

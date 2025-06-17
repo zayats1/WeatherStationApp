@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.room.Room.databaseBuilder
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import com.bogdandev.weatherstationapp.data.DBBuilder
+import com.bogdandev.weatherstationapp.data.SavedIP
 import com.bogdandev.weatherstationapp.data.WeatherStationIPDB
 import com.bogdandev.weatherstationapp.ui.Screen
 import com.bogdandev.weatherstationapp.ui.SettingsScreen
@@ -23,8 +24,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val model = WeatherStationViewModel()
-        val  db = DBBuilder.getInstance(baseContext)
+        val model = WeatherStationViewModel(context = baseContext)
+
         setContent {
             val navController = rememberNavController()
 
