@@ -1,8 +1,11 @@
 package com.bogdandev.weatherstationapp.app
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bogdandev.weatherstationapp.data.DBBuilder
+import com.bogdandev.weatherstationapp.data.SavedIP
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -22,19 +25,41 @@ import java.net.SocketException
 
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
-const val URL: String = "http://192.168.1.1/" // TODO url selector
+const val IP: String = "192.168.1.1"
+const val URL: String = "http://$IP/" // TODO url selector
 
-class WeatherStationViewModel : ViewModel() {
+class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     private var isActive = true
     private val client = HttpClient(CIO)
     private var _weatherInfo = MutableStateFlow(WeatherInfo())
-    val  weatherInfo = _weatherInfo.asStateFlow()
+    val weatherInfo = _weatherInfo.asStateFlow()
     private var _isConnected = MutableStateFlow(false)
     val isConnected = _isConnected.asStateFlow()
     private var _isSI = MutableStateFlow(true)
     val isSi = _isSI.asStateFlow()
+    private var _savedIP = MutableStateFlow(
+        SavedIP(
+            ssid = "",
+            ipaddr = ""
+        )
+    )
+    val savedIP = _savedIP.asStateFlow()
 
     init {
+        Thread {
+            //Do your database´s operations here
+            val db = context?.let { DBBuilder.getInstance(it) }
+            db?.savedIPDao?.insertAll(
+                SavedIP(
+                    ssid = "WeatherStation",
+                    ipaddr = "192.168.1.1"
+                )
+            )
+            val addresses = db?.savedIPDao?.getAll();
+            Log.d("db", addresses.toString())
+            _savedIP.value = addresses?.get(0)!!  // Todo error handling
+            db?.close()
+        }.start()
         viewModelScope.launch {
             fetchWeatherInfo(URL)
         }
@@ -112,3 +137,4 @@ class WeatherStationViewModel : ViewModel() {
         }
     }
 }
+
