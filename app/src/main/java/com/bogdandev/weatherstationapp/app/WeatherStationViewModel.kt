@@ -25,8 +25,11 @@ import java.net.SocketException
 
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
-const val IP: String = "192.168.1.1"
-const val URL: String = "http://$IP/" // TODO url selector
+val DEFAULT_STATION: SavedIP = SavedIP(
+    ssid = "WeatherStation",
+    ipaddr = "192.168.1.1"
+)
+fun toURL(ip: String): String = ("http://$ip/") // TODO url selector
 
 class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     private var isActive = true
@@ -38,10 +41,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     private var _isSI = MutableStateFlow(true)
     val isSi = _isSI.asStateFlow()
     private var _savedIP = MutableStateFlow(
-        SavedIP(
-            ssid = "",
-            ipaddr = ""
-        )
+        DEFAULT_STATION
     )
     val savedIP = _savedIP.asStateFlow()
 
@@ -50,18 +50,14 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
             //Do your database´s operations here
             val db = context?.let { DBBuilder.getInstance(it) }
             db?.savedIPDao?.insertAll(
-                SavedIP(
-                    ssid = "WeatherStation",
-                    ipaddr = "192.168.1.1"
-                )
+                DEFAULT_STATION
             )
             val addresses = db?.savedIPDao?.getAll();
             Log.d("db", addresses.toString())
             _savedIP.value = addresses?.get(0)!!  // Todo error handling
-            db?.close()
         }.start()
         viewModelScope.launch {
-            fetchWeatherInfo(URL)
+            fetchWeatherInfo(toURL(savedIP.value.ipaddr!!))
         }
     }
 
