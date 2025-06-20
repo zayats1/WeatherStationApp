@@ -5,10 +5,10 @@ import androidx.room.Room
 
 object DBBuilder {
         private var INSTANCE: WeatherStationIPDB? = null
-        fun getInstance(context: Context): WeatherStationIPDB {
+        fun getInstance(context: Context?): WeatherStationIPDB {
             if (INSTANCE == null) {
                 synchronized(WeatherStationIPDB::class) {
-                    INSTANCE = buildRoomDB(context)
+                    INSTANCE = context?.let { buildRoomDB(it) }
                 }
             }
             return INSTANCE!!

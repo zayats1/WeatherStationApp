@@ -29,6 +29,7 @@ val DEFAULT_STATION: SavedIP = SavedIP(
     ssid = "WeatherStation",
     ipaddr = "192.168.1.1"
 )
+
 fun toURL(ip: String): String = ("http://$ip/") // TODO url selector
 
 class WeatherStationViewModel(context: Context? = null) : ViewModel() {
@@ -48,13 +49,14 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     init {
         Thread {
             //Do your database´s operations here
-            val db = context?.let { DBBuilder.getInstance(it) }
-            db?.savedIPDao?.insertAll(
+            val db = context.let { DBBuilder.getInstance(it) }
+            db.savedIPDao.insertAll(
                 DEFAULT_STATION
             )
-            val addresses = db?.savedIPDao?.getAll();
+            val addresses = db.savedIPDao.getAll()
             Log.d("db", addresses.toString())
-            _savedIP.value = addresses?.get(0)!!  // Todo error handling
+            _savedIP.value = addresses[0] // Todo error handling
+            db.close()
         }.start()
         viewModelScope.launch {
             fetchWeatherInfo(toURL(savedIP.value.ipaddr!!))
@@ -69,6 +71,23 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
         _isSI.value = false
     }
 
+    fun getIPs(context: Context? = null): List<SavedIP>? {
+        var theAddresses: List<SavedIP>? = null
+       var thread = Thread {
+            //Do your database´s operations here
+            val db = context?.let { DBBuilder.getInstance(it) }
+            db?.savedIPDao?.insertAll(
+                DEFAULT_STATION
+            )
+            theAddresses = db?.savedIPDao?.getAll()
+            Log.d("db", theAddresses.toString())
+            // Todo error handling
+            db?.close()
+        }
+        thread.start()
+        thread.join()
+        return theAddresses
+    }
 
     private suspend fun fetchWeatherInfo(url: String) {
         _weatherInfo.value = WeatherInfo()
