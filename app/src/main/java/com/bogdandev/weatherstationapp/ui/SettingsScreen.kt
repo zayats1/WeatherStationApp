@@ -209,6 +209,7 @@ fun ConnectionInfo(
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
         DropdownMenu(
+            modifier = modifier,
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
