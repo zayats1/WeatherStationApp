@@ -1,5 +1,6 @@
 package com.bogdandev.weatherstationapp.ui
 
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
@@ -19,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -191,6 +194,7 @@ fun ConnectionInfo(
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
     var expanded by remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
     DisplayBar(modifier = modifier) {
         Text(
             text = "Connection\ninfo:",
@@ -216,7 +220,14 @@ fun ConnectionInfo(
                     text = { Text(option.ipaddr.toString()) },
                     onClick = { /* Do something... */ }
                 )
+
             }
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                maxLines = 1,
+                label = { Text("Insert url") }
+            )
         }
     }
 }
