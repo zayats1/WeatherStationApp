@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
@@ -189,7 +188,6 @@ fun GoBack(modifier: Modifier = Modifier, navController: NavController = remembe
 @Composable
 fun ConnectionInfo(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController(),
     model: WeatherStationViewModel = WeatherStationViewModel()
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
@@ -215,7 +213,7 @@ fun ConnectionInfo(
         ) {
 
             val ips = model.getIPs(LocalContext.current)
-            Log.d("Connection Info",ips.toString())
+            Log.d("Connection Info", ips.toString())
             ips?.forEach { option ->
                 DropdownMenuItem(
                     text = { Text(option.ipaddr.toString()) },

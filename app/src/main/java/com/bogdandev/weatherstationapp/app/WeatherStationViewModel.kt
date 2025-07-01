@@ -75,7 +75,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
 
     fun getIPs(context: Context? = null): List<SavedIP>? {
         var theAddresses: List<SavedIP>? = null
-       var thread = Thread {
+        val thread = Thread {
             //Do your database´s operations here
             val db = context?.let { DBBuilder.getInstance(it) }
             db?.savedIPDao?.insertAll(
