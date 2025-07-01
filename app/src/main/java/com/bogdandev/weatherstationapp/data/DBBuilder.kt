@@ -11,7 +11,6 @@ object DBBuilder {
                     INSTANCE = context?.let { buildRoomDB(it) }
                 }
             }
-        }
         return INSTANCE!!
     }
 
