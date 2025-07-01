@@ -20,13 +20,6 @@ class WeatherInfoTest {
         assertEquals(weatherInfo.humidity, infoInImperial.humidity, TOLERANCE)
     }
 
-    @Test
-    fun toSI() {
-        val infoInSI = weatherInfo.toSI()
-        assertEquals(weatherInfo.pressure, infoInSI.pressure, TOLERANCE)
-        assertEquals(weatherInfo.humidity, infoInSI.humidity, TOLERANCE)
-        assertEquals(weatherInfo.temperature, infoInSI.temperature, TOLERANCE)
-    }
 
     @Test
     fun kPaToAtm() {

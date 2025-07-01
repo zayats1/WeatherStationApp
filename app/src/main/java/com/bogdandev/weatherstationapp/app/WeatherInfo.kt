@@ -17,10 +17,6 @@ data class WeatherInfo(
         )
     }
 
-    fun toSI(): WeatherInfo {
-        return this
-    }
-
     fun kPaToAtm(pressure: Double): Double {
         return pressure * 0.00986923267
     }

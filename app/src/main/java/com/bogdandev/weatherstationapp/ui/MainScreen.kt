@@ -40,7 +40,7 @@ fun Weather(
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
     val isSi by model.isSi.collectAsStateWithLifecycle()
     val (info, tempUnit, pressureUnit) = if (isSi) {
-        Triple(weatherInfo.toSI(), "*C", "kPa")
+        Triple(weatherInfo, "*C", "kPa")
     } else {
         Triple(weatherInfo.toImperial(), "*F", "atm")
     }
