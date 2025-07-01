@@ -1,4 +1,5 @@
 package com.bogdandev.weatherstationapp.ui
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -29,8 +30,6 @@ import java.util.Calendar
 import java.util.Date
 
 
-
-
 @Composable
 fun Weather(
     modifier: Modifier = Modifier,
@@ -40,10 +39,10 @@ fun Weather(
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
     val isSi by model.isSi.collectAsStateWithLifecycle()
-    val (info,tempUnit,pressureUnit )= if (isSi) {
-        Triple (weatherInfo.toSI(),"*C","kPa")
+    val (info, tempUnit, pressureUnit) = if (isSi) {
+        Triple(weatherInfo.toSI(), "*C", "kPa")
     } else {
-        Triple (weatherInfo.toImperial(),"*F","atm")
+        Triple(weatherInfo.toImperial(), "*F", "atm")
     }
 
     fun roundIt(value: Double): String = "%.3f".format(value)
@@ -55,25 +54,25 @@ fun Weather(
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                pressure =  roundIt(info.pressure).toString() + pressureUnit,
+                pressure = roundIt(info.pressure).toString() + pressureUnit,
                 modifier = modifier
             )
             TemperatureBar(
-                temperature =  roundIt(info.temperature).toString() + tempUnit,
+                temperature = roundIt(info.temperature).toString() + tempUnit,
                 modifier = modifier
             )
             Humidity(
-                humidity =  roundIt(info.humidity)+ "%",
+                humidity = roundIt(info.humidity) + "%",
                 modifier = modifier
             )
             NetworkStatus(
                 isConnected = isConnected,
                 modifier = modifier
             )
-          Settings(
-              navController = navController,
-              modifier = modifier
-          )
+            Settings(
+                navController = navController,
+                modifier = modifier
+            )
         }
     }
 }
@@ -94,9 +93,7 @@ fun Settings(
             modifier = modifier
                 .size(150.dp)
                 .padding(end = 2.dp)
-                .clip(CircleShape)
-
-            ,
+                .clip(CircleShape),
             colors = ButtonColors(
                 contentColor = Color.Magenta,
                 disabledContainerColor = Color.Transparent,
@@ -104,7 +101,7 @@ fun Settings(
                 containerColor = Color.Transparent,
             ),
             onClick = {
-             navController.navigate(Screen.SETTINGS.toString())
+                navController.navigate(Screen.SETTINGS.toString())
             }
         ) {
             Image(
@@ -160,7 +157,7 @@ fun WeatherPreview() {
             .width(1080.dp)
     ) {
         Weather(
-             modifier =  Modifier
+            modifier = Modifier
         )
     }
 }
@@ -170,7 +167,7 @@ fun WeatherPreview() {
 @Composable
 fun TemperatureBar(
     modifier: Modifier = Modifier,
-    temperature: String= "0*C"
+    temperature: String = "0*C"
 ) {
     DisplayBar(modifier) {
 
@@ -233,7 +230,7 @@ fun DateAndTimeBar(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PressureBar(modifier: Modifier = Modifier, pressure:String = "0kPa") {
+fun PressureBar(modifier: Modifier = Modifier, pressure: String = "0kPa") {
     DisplayBar(modifier) {
         Text(
             text = pressure,

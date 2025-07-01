@@ -30,17 +30,19 @@ import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsScreen(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel(),
-                   navController: NavController = rememberNavController()) {
+fun SettingsScreen(
+    modifier: Modifier = Modifier, model: WeatherStationViewModel = WeatherStationViewModel(),
+    navController: NavController = rememberNavController()
+) {
     Surface(modifier) {
         Column(
             modifier.padding(top = 45.dp)
         ) {
-          SelectUnits(
-              modifier = modifier,
-              model = model
-          )
-            ConnectionInfo(modifier=modifier,model=model)
+            SelectUnits(
+                modifier = modifier,
+                model = model
+            )
+            ConnectionInfo(modifier = modifier, model = model)
             GoBack(
                 modifier = modifier,
                 navController = navController
@@ -48,6 +50,7 @@ fun SettingsScreen(modifier: Modifier = Modifier,model: WeatherStationViewModel 
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SettingsPreview() {
@@ -64,7 +67,10 @@ fun SettingsPreview() {
 
 @Preview
 @Composable
-fun SelectUnits(modifier: Modifier = Modifier,model: WeatherStationViewModel = WeatherStationViewModel()) {
+fun SelectUnits(
+    modifier: Modifier = Modifier,
+    model: WeatherStationViewModel = WeatherStationViewModel()
+) {
     val isSi by model.isSi.collectAsStateWithLifecycle()
     DisplayBar(modifier = modifier) {
         Text(
@@ -126,20 +132,18 @@ fun SelectUnits(modifier: Modifier = Modifier,model: WeatherStationViewModel = W
 }
 
 
-
-
-
 @Preview
 @Composable
-fun GoBack(modifier: Modifier = Modifier,navController: NavController = rememberNavController()){
-    DisplayBar (modifier = modifier) {
+fun GoBack(modifier: Modifier = Modifier, navController: NavController = rememberNavController()) {
+    DisplayBar(modifier = modifier) {
         Text(
             text = "Return!",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
-        Button(onClick = {
-            navController.navigate(Screen.MAIN.toString())
-        },
+        Button(
+            onClick = {
+                navController.navigate(Screen.MAIN.toString())
+            },
             modifier = modifier
                 .size(150.dp)
                 .padding(end = 2.dp)
@@ -151,7 +155,7 @@ fun GoBack(modifier: Modifier = Modifier,navController: NavController = remember
                 containerColor = Color.Transparent,
             ),
 
-        ) {
+            ) {
             Image(
                 painter = painterResource(
                     R.drawable.sun_foreground
@@ -171,8 +175,12 @@ fun GoBack(modifier: Modifier = Modifier,navController: NavController = remember
 
 @Preview
 @Composable
-fun ConnectionInfo(modifier: Modifier = Modifier,navController: NavController = rememberNavController(),model: WeatherStationViewModel = WeatherStationViewModel()) {
-    val info = model.savedIP.collectAsStateWithLifecycle().value;
+fun ConnectionInfo(
+    modifier: Modifier = Modifier,
+    navController: NavController = rememberNavController(),
+    model: WeatherStationViewModel = WeatherStationViewModel()
+) {
+    val info = model.savedIP.collectAsStateWithLifecycle().value
     DisplayBar(modifier = modifier) {
         Text(
             text = "Connection info:",

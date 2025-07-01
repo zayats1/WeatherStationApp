@@ -55,7 +55,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
                     ipaddr = "192.168.1.1"
                 )
             )
-            val addresses = db?.savedIPDao?.getAll();
+            val addresses = db?.savedIPDao?.getAll()
             Log.d("db", addresses.toString())
             _savedIP.value = addresses?.get(0)!!  // Todo error handling
             db?.close()
