@@ -54,11 +54,11 @@ fun Weather(
         {
             DateAndTimeBar(modifier)
             PressureBar(
-                pressure = roundIt(info.pressure).toString() + pressureUnit,
+                pressure = roundIt(info.pressure) + pressureUnit,
                 modifier = modifier
             )
             TemperatureBar(
-                temperature = roundIt(info.temperature).toString() + tempUnit,
+                temperature = roundIt(info.temperature) + tempUnit,
                 modifier = modifier
             )
             Humidity(
