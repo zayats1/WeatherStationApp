@@ -11,12 +11,14 @@ object DBBuilder {
                     INSTANCE = context?.let { buildRoomDB(it) }
                 }
             }
-            return INSTANCE!!
         }
-        private fun buildRoomDB(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                WeatherStationIPDB::class.java,
-                "WeatherStationIPDB"
-            ).build()
+        return INSTANCE!!
     }
+
+    private fun buildRoomDB(context: Context) =
+        Room.databaseBuilder(
+            context.applicationContext,
+            WeatherStationIPDB::class.java,
+            "WeatherStationIPDB"
+        ).build()
+}
