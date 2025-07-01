@@ -1,5 +1,7 @@
 package com.bogdandev.weatherstationapp.ui
 
+
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,17 +10,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -181,15 +193,42 @@ fun ConnectionInfo(
     model: WeatherStationViewModel = WeatherStationViewModel()
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
+    var expanded by remember { mutableStateOf(false) }
+    var text by remember { mutableStateOf("") }
     DisplayBar(modifier = modifier) {
         Text(
-            text = "Connection info:",
+            text = "Connection\ninfo:",
             modifier = modifier.padding(start = 10.dp, end = 2.dp)
         )
         Text(
             text = "ssid:${info.ssid}\nip address:${info.ipaddr}",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
+
+        IconButton(onClick = { expanded = !expanded }) {
+            Icon(Icons.Default.MoreVert, contentDescription = "More options")
+        }
+        DropdownMenu(
+            modifier = modifier,
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+
+            val ips = model.getIPs(LocalContext.current)
+            Log.d("Connection Info",ips.toString())
+            ips?.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option.ipaddr.toString()) },
+                    onClick = { /* Do something... */ }
+                )
+
+            }
+            TextField(
+                value = text,
+                onValueChange = { text = it },
+                maxLines = 1,
+                label = { Text("Insert url") }
+            )
+        }
     }
 }
-
