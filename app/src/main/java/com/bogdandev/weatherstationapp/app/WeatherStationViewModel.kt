@@ -73,7 +73,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
         _isSI.value = false
     }
 
-    fun getIPs(context: Context? = null): List<SavedProviders>? {
+    fun getProviders(context: Context? = null): List<SavedProviders>? {
         var providers: List<SavedProviders>? = null
         val thread = Thread {
             //Do your database´s operations here

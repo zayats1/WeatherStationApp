@@ -194,7 +194,7 @@ fun ConnectionInfo(
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
     var isMenuExpanded by remember { mutableStateOf(false) }
-    val urls = model.getIPs(LocalContext.current)
+    val providers= model.getProviders(LocalContext.current)
     DisplayBar(modifier = modifier) {
         Text(
             text = "Connection\ninfo:",
@@ -208,9 +208,9 @@ fun ConnectionInfo(
         IconButton(onClick = { isMenuExpanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
-        urls?.let { it ->
+        providers?.let { it ->
             Log.d("Connection Info", it.toString())
-            UrlsMenu(
+            ProvidersMenu(
                 modifier = modifier,
                 urls = it,
                 isExpanded = isMenuExpanded,
@@ -225,7 +225,7 @@ fun ConnectionInfo(
 
 
 @Composable
-fun UrlsMenu(
+fun ProvidersMenu(
     modifier: Modifier = Modifier, urls: List<SavedProviders>, isExpanded: Boolean,
     onDismiss: () -> Unit
 ) {
@@ -254,12 +254,12 @@ fun UrlsMenu(
 
 @Preview(showBackground = true)
 @Composable
-fun UrlsMenuPreview(
+fun ProvidersMenuPreview(
 ) {
     val urls = listOf(
         SavedProviders("Hi", "192.168.1.1"),
         SavedProviders("LoremIpSon", "192.168.1.2")
     )
-    UrlsMenu(urls = urls, isExpanded = true, onDismiss = {})
+    ProvidersMenu(urls = urls, isExpanded = true, onDismiss = {})
 
 }
