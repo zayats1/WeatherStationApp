@@ -11,9 +11,9 @@ interface SavedProvidersDao {
     fun getAll(): List<SavedProviders>
 
     @Insert(onConflict = REPLACE)
-    fun insertAll(vararg ipaddr: SavedProviders)
+    fun insertAll(vararg url: SavedProviders)
 
     @Delete
-    fun delete(ipaddr: SavedProviders)
+    fun delete(url: SavedProviders)
 }
 

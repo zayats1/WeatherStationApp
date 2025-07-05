@@ -74,21 +74,21 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     }
 
     fun getIPs(context: Context? = null): List<SavedProviders>? {
-        var theAddresses: List<SavedProviders>? = null
+        var providers: List<SavedProviders>? = null
         val thread = Thread {
             //Do your database´s operations here
             val db = context?.let { DBBuilder.getInstance(it) }
             db?.savedIPDao?.insertAll(
                 DEFAULT_STATION
             )
-            theAddresses = db?.savedIPDao?.getAll()
-            Log.d("db", theAddresses.toString())
+            providers = db?.savedIPDao?.getAll()
+            Log.d("db", providers.toString())
             // Todo error handling
             db?.close()
         }
         thread.start()
         thread.join()
-        return theAddresses
+        return providers
     }
 
     private suspend fun fetchWeatherInfo(url: String) {
