@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
+import com.bogdandev.weatherstationapp.data.SavedIP
 
 @Preview(showBackground = true)
 @Composable
@@ -184,15 +185,29 @@ fun GoBack(modifier: Modifier = Modifier, navController: NavController = remembe
     }
 }
 
+
+class  Expander(expanded: Boolean){
+    private var isExpanded  = expanded
+
+    fun close(){
+        isExpanded = false
+    }
+    fun toggle(){
+        isExpanded = !isExpanded
+    }
+    fun get(): Boolean{
+        return isExpanded
+    }
+}
 @Preview
 @Composable
 fun ConnectionInfo(
     modifier: Modifier = Modifier,
-    model: WeatherStationViewModel = WeatherStationViewModel()
+    model: WeatherStationViewModel = WeatherStationViewModel(),
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
-    var expanded by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
+    var expander by remember { mutableStateOf(Expander(false)) }
+    val ips = model.getIPs(LocalContext.current)
     DisplayBar(modifier = modifier) {
         Text(
             text = "Connection\ninfo:",
@@ -203,30 +218,51 @@ fun ConnectionInfo(
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
 
-        IconButton(onClick = { expanded = !expanded }) {
+        IconButton(onClick = { expander.toggle() }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
-        DropdownMenu(
+        ips?.let { it -> IpsMenu(
             modifier = modifier,
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
+            ips = it,
+            expander = expander
+        ) }
 
-            val ips = model.getIPs(LocalContext.current)
-            Log.d("Connection Info", ips.toString())
-            ips?.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option.ipaddr.toString()) },
-                    onClick = { /* Do something... */ }
-                )
-
-            }
-            TextField(
-                value = text,
-                onValueChange = { text = it },
-                maxLines = 1,
-                label = { Text("Insert url") }
-            )
-        }
     }
+}
+
+
+
+@Composable
+fun IpsMenu(  modifier: Modifier = Modifier,ips: List<SavedIP>, expander: Expander = Expander(false)) {
+    DropdownMenu(
+        modifier = modifier,
+        expanded = expander.get(),
+        onDismissRequest = { expander.close()}
+    ) {
+
+        Log.d("Connection Info", ips.toString())
+        ips.forEach { option ->
+            DropdownMenuItem(
+                text = { Text(option.ipaddr.toString()) },
+                onClick = { /* Do something... */ }
+            )
+
+        }
+        var text by remember { mutableStateOf("Hello") }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            maxLines = 1,
+            label = { Text("Insert url") }
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun IpsMenuPreview(
+) {
+    val ips = listOf(SavedIP("Hi","192.168.1.1"), SavedIP("LoremIpSon","192.168.1.2"))
+    IpsMenu(ips = ips, expander = Expander(true))
 }
