@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bogdandev.weatherstationapp.data.DBBuilder
-import com.bogdandev.weatherstationapp.data.SavedIP
+import com.bogdandev.weatherstationapp.data.SavedProviders
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -25,7 +25,7 @@ import java.net.SocketException
 
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
-val DEFAULT_STATION: SavedIP = SavedIP(
+val DEFAULT_STATION: SavedProviders = SavedProviders(
     ssid = "WeatherStation",
     ipaddr = "192.168.1.1"
 )
@@ -73,8 +73,8 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
         _isSI.value = false
     }
 
-    fun getIPs(context: Context? = null): List<SavedIP>? {
-        var theAddresses: List<SavedIP>? = null
+    fun getIPs(context: Context? = null): List<SavedProviders>? {
+        var theAddresses: List<SavedProviders>? = null
         val thread = Thread {
             //Do your database´s operations here
             val db = context?.let { DBBuilder.getInstance(it) }

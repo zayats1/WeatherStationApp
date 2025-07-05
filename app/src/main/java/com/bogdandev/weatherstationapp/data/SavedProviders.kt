@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class SavedIP(
+data class SavedProviders(
     @PrimaryKey @ColumnInfo(name = "ssid") val ssid: String,
     @ColumnInfo(name = "ipaddr") val ipaddr: String?
 ) {

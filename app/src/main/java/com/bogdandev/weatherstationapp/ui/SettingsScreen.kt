@@ -38,7 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
-import com.bogdandev.weatherstationapp.data.SavedIP
+import com.bogdandev.weatherstationapp.data.SavedProviders
 
 @Preview(showBackground = true)
 @Composable
@@ -233,7 +233,7 @@ fun ConnectionInfo(
 
 
 @Composable
-fun IpsMenu(  modifier: Modifier = Modifier,ips: List<SavedIP>, expander: Expander = Expander(false)) {
+fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, expander: Expander = Expander(false)) {
     DropdownMenu(
         modifier = modifier,
         expanded = expander.get(),
@@ -263,6 +263,6 @@ fun IpsMenu(  modifier: Modifier = Modifier,ips: List<SavedIP>, expander: Expand
 @Composable
 fun IpsMenuPreview(
 ) {
-    val ips = listOf(SavedIP("Hi","192.168.1.1"), SavedIP("LoremIpSon","192.168.1.2"))
+    val ips = listOf(SavedProviders("Hi","192.168.1.1"), SavedProviders("LoremIpSon","192.168.1.2"))
     IpsMenu(ips = ips, expander = Expander(true))
 }
