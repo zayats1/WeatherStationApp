@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -186,19 +187,6 @@ fun GoBack(modifier: Modifier = Modifier, navController: NavController = remembe
 }
 
 
-class  Expander(expanded: Boolean){
-    private var isExpanded  = expanded
-
-    fun close(){
-        isExpanded = false
-    }
-    fun toggle(){
-        isExpanded = !isExpanded
-    }
-    fun get(): Boolean{
-        return isExpanded
-    }
-}
 @Preview
 @Composable
 fun ConnectionInfo(
@@ -206,7 +194,7 @@ fun ConnectionInfo(
     model: WeatherStationViewModel = WeatherStationViewModel(),
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
-    var expander by remember { mutableStateOf(Expander(false)) }
+    var isMenuExpanded by remember { mutableStateOf(false) }
     val ips = model.getIPs(LocalContext.current)
     DisplayBar(modifier = modifier) {
         Text(
@@ -218,13 +206,16 @@ fun ConnectionInfo(
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
 
-        IconButton(onClick = { expander.toggle() }) {
+        IconButton(onClick = { isMenuExpanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
         ips?.let { it -> IpsMenu(
             modifier = modifier,
             ips = it,
-            expander = expander
+            isExpanded = isMenuExpanded,
+            onDismiss = {
+                isMenuExpanded = false
+            }
         ) }
 
     }
@@ -233,11 +224,13 @@ fun ConnectionInfo(
 
 
 @Composable
-fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, expander: Expander = Expander(false)) {
+fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, isExpanded:Boolean,
+onDismiss: ()-> Unit
+) {
     DropdownMenu(
         modifier = modifier,
-        expanded = expander.get(),
-        onDismissRequest = { expander.close()}
+        expanded = isExpanded,
+        onDismissRequest = {onDismiss() }
     ) {
 
         Log.d("Connection Info", ips.toString())
@@ -264,5 +257,6 @@ fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, expander: 
 fun IpsMenuPreview(
 ) {
     val ips = listOf(SavedProviders("Hi","192.168.1.1"), SavedProviders("LoremIpSon","192.168.1.2"))
-    IpsMenu(ips = ips, expander = Expander(true))
+    IpsMenu(ips = ips, isExpanded = true,onDismiss = {})
+    Spacer(modifier = Modifier.height(20.dp))
 }
