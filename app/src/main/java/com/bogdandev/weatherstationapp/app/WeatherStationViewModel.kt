@@ -27,7 +27,7 @@ const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
 val DEFAULT_STATION: SavedProviders = SavedProviders(
     ssid = "WeatherStation",
-    ipaddr = "192.168.1.1"
+    url = "192.168.1.1"
 )
 
 fun toURL(ip: String): String = ("http://$ip/") // TODO url selector
@@ -61,7 +61,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
             db.close()
         }.start()
         viewModelScope.launch {
-            fetchWeatherInfo(toURL(savedIP.value.ipaddr!!))
+            fetchWeatherInfo(toURL(savedIP.value.url!!))
         }
     }
 

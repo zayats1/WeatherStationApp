@@ -214,7 +214,7 @@ fun ConnectionInfo(
             modifier = modifier.padding(start = 10.dp, end = 2.dp)
         )
         Text(
-            text = "ssid:${info.ssid}\nip address:${info.ipaddr}",
+            text = "ssid:${info.ssid}\nip address:${info.url}",
             modifier = modifier.padding(start = 10.dp, end = 20.dp)
         )
 
@@ -243,7 +243,7 @@ fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, expander: 
         Log.d("Connection Info", ips.toString())
         ips.forEach { option ->
             DropdownMenuItem(
-                text = { Text(option.ipaddr.toString()) },
+                text = { Text(option.url.toString()) },
                 onClick = { /* Do something... */ }
             )
 
