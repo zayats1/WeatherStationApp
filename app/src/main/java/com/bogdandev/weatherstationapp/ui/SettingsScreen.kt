@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -195,7 +194,7 @@ fun ConnectionInfo(
 ) {
     val info = model.savedIP.collectAsStateWithLifecycle().value
     var isMenuExpanded by remember { mutableStateOf(false) }
-    val ips = model.getIPs(LocalContext.current)
+    val urls = model.getIPs(LocalContext.current)
     DisplayBar(modifier = modifier) {
         Text(
             text = "Connection\ninfo:",
@@ -209,32 +208,33 @@ fun ConnectionInfo(
         IconButton(onClick = { isMenuExpanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
-        ips?.let { it -> IpsMenu(
-            modifier = modifier,
-            ips = it,
-            isExpanded = isMenuExpanded,
-            onDismiss = {
-                isMenuExpanded = false
-            }
-        ) }
+        urls?.let { it ->
+            Log.d("Connection Info", it.toString())
+            UrlsMenu(
+                modifier = modifier,
+                urls = it,
+                isExpanded = isMenuExpanded,
+                onDismiss = {
+                    isMenuExpanded = false
+                }
+            )
+        }
 
     }
 }
 
 
-
 @Composable
-fun IpsMenu(modifier: Modifier = Modifier, ips: List<SavedProviders>, isExpanded:Boolean,
-onDismiss: ()-> Unit
+fun UrlsMenu(
+    modifier: Modifier = Modifier, urls: List<SavedProviders>, isExpanded: Boolean,
+    onDismiss: () -> Unit
 ) {
     DropdownMenu(
         modifier = modifier,
         expanded = isExpanded,
-        onDismissRequest = {onDismiss() }
+        onDismissRequest = { onDismiss() }
     ) {
-
-        Log.d("Connection Info", ips.toString())
-        ips.forEach { option ->
+        urls.forEach { option ->
             DropdownMenuItem(
                 text = { Text(option.url.toString()) },
                 onClick = { /* Do something... */ }
@@ -254,9 +254,12 @@ onDismiss: ()-> Unit
 
 @Preview(showBackground = true)
 @Composable
-fun IpsMenuPreview(
+fun UrlsMenuPreview(
 ) {
-    val ips = listOf(SavedProviders("Hi","192.168.1.1"), SavedProviders("LoremIpSon","192.168.1.2"))
-    IpsMenu(ips = ips, isExpanded = true,onDismiss = {})
-    Spacer(modifier = Modifier.height(20.dp))
+    val urls = listOf(
+        SavedProviders("Hi", "192.168.1.1"),
+        SavedProviders("LoremIpSon", "192.168.1.2")
+    )
+    UrlsMenu(urls = urls, isExpanded = true, onDismiss = {})
+
 }
