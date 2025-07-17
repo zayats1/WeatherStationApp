@@ -26,11 +26,8 @@ import java.net.SocketException
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
 val DEFAULT_STATION: SavedProviders = SavedProviders(
-    ssid = "WeatherStation",
-    url = "192.168.1.1"
+    url = "http://192.168.1.1/"
 )
-
-fun toURL(ip: String): String = ("http://$ip/") // TODO url selector
 
 class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     private var isActive = true
@@ -41,10 +38,10 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     val isConnected = _isConnected.asStateFlow()
     private var _isSI = MutableStateFlow(true)
     val isSi = _isSI.asStateFlow()
-    private var _savedIP = MutableStateFlow(
+    private var _savedProvider = MutableStateFlow(
         DEFAULT_STATION
     )
-    val savedIP = _savedIP.asStateFlow()
+    val savedProvider = _savedProvider.asStateFlow()
 
     init {
         Thread {
@@ -57,11 +54,11 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
             val addresses = db.savedIPDao.getAll()
 
             Log.d("db", addresses.toString())
-            _savedIP.value = addresses[0] // Todo error handling
+            _savedProvider.value = addresses[0] // Todo error handling
             db.close()
         }.start()
         viewModelScope.launch {
-            fetchWeatherInfo(toURL(savedIP.value.url!!))
+            fetchWeatherInfo(savedProvider.value.url)
         }
     }
 

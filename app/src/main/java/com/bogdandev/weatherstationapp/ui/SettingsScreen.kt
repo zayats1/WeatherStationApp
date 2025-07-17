@@ -192,19 +192,20 @@ fun ConnectionInfo(
     modifier: Modifier = Modifier,
     model: WeatherStationViewModel = WeatherStationViewModel(),
 ) {
-    val info = model.savedIP.collectAsStateWithLifecycle().value
+    val provider = model.savedProvider.collectAsStateWithLifecycle().value
     var isMenuExpanded by remember { mutableStateOf(false) }
     val providers= model.getProviders(LocalContext.current)
     DisplayBar(modifier = modifier) {
-        Text(
-            text = "Connection\ninfo:",
-            modifier = modifier.padding(start = 10.dp, end = 2.dp)
-        )
-        Text(
-            text = "ssid:${info.ssid}\nip address:${info.url}",
-            modifier = modifier.padding(start = 10.dp, end = 20.dp)
-        )
-
+        Column {
+            Text(
+                text = "Selected provider:",
+                modifier = modifier.padding(start = 10.dp, end = 2.dp)
+            )
+            Text(
+                text = provider.url,
+                modifier = modifier.padding(start = 10.dp, end = 20.dp)
+            )
+        }
         IconButton(onClick = { isMenuExpanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
@@ -257,8 +258,9 @@ fun ProvidersMenu(
 fun ProvidersMenuPreview(
 ) {
     val urls = listOf(
-        SavedProviders("Hi", "192.168.1.1"),
-        SavedProviders("LoremIpSon", "192.168.1.2")
+        SavedProviders("http://192.168.1.1/"),
+        SavedProviders("https://192.168.1.2/"),
+        SavedProviders("https://www.4chan.org/")
     )
     ProvidersMenu(urls = urls, isExpanded = true, onDismiss = {})
 

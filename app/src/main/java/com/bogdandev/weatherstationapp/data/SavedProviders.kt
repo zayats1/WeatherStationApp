@@ -6,8 +6,5 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class SavedProviders(
-    @PrimaryKey @ColumnInfo(name = "ssid") val ssid: String,
-    @ColumnInfo(name = "url") val url: String?
-) {
-    companion object
-}
+    @PrimaryKey @ColumnInfo(name = "url") val url: String
+)

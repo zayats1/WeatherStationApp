@@ -7,7 +7,7 @@ import com.bogdandev.weatherstationapp.data.SavedProviders
 
 @Dao
 interface SavedProvidersDao {
-    @Query("SELECT * FROM SavedProviders")
+    @Query("SELECT url FROM SavedProviders")
     fun getAll(): List<SavedProviders>
 
     @Insert(onConflict = REPLACE)
