@@ -26,7 +26,7 @@ import java.net.SocketException
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
 val DEFAULT_STATION: SavedProviders = SavedProviders(
-    url = "http://192.168.1.1/"
+    url = "http://192.168.1.1"
 )
 
 class WeatherStationViewModel(context: Context? = null) : ViewModel() {
@@ -44,19 +44,23 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     val savedProvider = _savedProvider.asStateFlow()
 
     init {
-        Thread {
-            //Do your database´s operations here
+        val thread = Thread {
+            //Do your database's operations here
             val db = context.let { DBBuilder.getInstance(it) }
-            db.savedIPDao.insertAll(
-                DEFAULT_STATION
-            )
+            if (db.isOpen) {
+                db.savedIPDao.insertAll(
+                    DEFAULT_STATION
+                )
+                val addresses =   db.savedIPDao.getAll()
 
-            val addresses = db.savedIPDao.getAll()
+                Log.d("db", addresses.toString())
+                _savedProvider.value = addresses[0] // Todo error handling
+                db.close()
+            }
 
-            Log.d("db", addresses.toString())
-            _savedProvider.value = addresses[0] // Todo error handling
-            db.close()
-        }.start()
+        }
+        thread.start()
+        thread.join()
         viewModelScope.launch {
             fetchWeatherInfo(savedProvider.value.url)
         }
@@ -73,15 +77,18 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
     fun getProviders(context: Context? = null): List<SavedProviders>? {
         var providers: List<SavedProviders>? = null
         val thread = Thread {
-            //Do your database´s operations here
+            //Do your database's operations here
             val db = context?.let { DBBuilder.getInstance(it) }
-            db?.savedIPDao?.insertAll(
-                DEFAULT_STATION
-            )
-            providers = db?.savedIPDao?.getAll()
-            Log.d("db", providers.toString())
-            // Todo error handling
-            db?.close()
+            if (db?.isOpen == true) {
+                db.savedIPDao.insertAll(
+                    DEFAULT_STATION
+                )
+                providers = db.savedIPDao.getAll()
+                Log.d("db", providers.toString())
+                // Todo error handling
+
+                db.close()
+            }
         }
         thread.start()
         thread.join()
