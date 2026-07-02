@@ -32,17 +32,18 @@ import java.util.Date
 
 
 @Composable
-fun MainScreen( modifier: Modifier = Modifier,
-                model: WeatherStationViewModel,
-                navController: NavController = rememberNavController(),
-){
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    model: WeatherStationViewModel,
+    navController: NavController = rememberNavController(),
+) {
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
     val isSi by model.isSi.collectAsStateWithLifecycle()
     Weather(
         modifier,
-     weatherInfo,
-    isConnected,
+        weatherInfo,
+        isConnected,
         isSi,
         navController
     )

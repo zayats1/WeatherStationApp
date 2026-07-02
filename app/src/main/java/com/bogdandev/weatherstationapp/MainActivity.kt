@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -14,7 +13,6 @@ import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import com.bogdandev.weatherstationapp.ui.MainScreen
 import com.bogdandev.weatherstationapp.ui.Screen
 import com.bogdandev.weatherstationapp.ui.SettingsScreen
-import com.bogdandev.weatherstationapp.ui.Weather
 import com.bogdandev.weatherstationapp.ui.theme.TheAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val model : WeatherStationViewModel = hiltViewModel()
+            val model: WeatherStationViewModel = hiltViewModel()
             val navController = rememberNavController()
             TheAppTheme {
 
@@ -36,7 +34,11 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screen.MAIN.toString()
                 ) {
                     composable(route = Screen.MAIN.toString()) {
-                        MainScreen(modifier = Modifier, model = model, navController = navController)
+                        MainScreen(
+                            modifier = Modifier,
+                            model = model,
+                            navController = navController
+                        )
                     }
                     composable(route = Screen.SETTINGS.toString()) {
                         SettingsScreen(

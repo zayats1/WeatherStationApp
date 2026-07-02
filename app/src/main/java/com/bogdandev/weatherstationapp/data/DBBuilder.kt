@@ -11,7 +11,7 @@ object DBBuilder {
     fun getInstance(context: Context): WeatherStationIPDB {
         if (INSTANCE == null) {
             synchronized(WeatherStationIPDB::class) {
-                INSTANCE =  buildRoomDB(context)
+                INSTANCE = buildRoomDB(context)
             }
         }
         return INSTANCE!!

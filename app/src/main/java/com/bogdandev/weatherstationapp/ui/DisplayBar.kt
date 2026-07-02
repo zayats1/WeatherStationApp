@@ -17,7 +17,7 @@ fun DisplayBar(
     content: @Composable RowScope.(modifier: Modifier) -> Unit
 ) {
     Row(
-        verticalAlignment = Alignment.Companion.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = modifier
             .padding(5.dp)

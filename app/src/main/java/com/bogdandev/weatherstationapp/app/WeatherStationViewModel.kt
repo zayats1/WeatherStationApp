@@ -1,11 +1,10 @@
 package com.bogdandev.weatherstationapp.app
 
-import com.bogdandev.weatherstationapp.data.SavedProvidersDao
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bogdandev.weatherstationapp.data.SavedProviders
+import com.bogdandev.weatherstationapp.data.SavedProvidersDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -35,47 +34,48 @@ val DEFAULT_STATION: SavedProviders = SavedProviders(
 )
 
 @HiltViewModel
-class WeatherStationViewModel @Inject constructor (private val savedProvidersDao: SavedProvidersDao) : ViewModel() {
+class WeatherStationViewModel @Inject constructor(private val savedProvidersDao: SavedProvidersDao) :
+    ViewModel() {
     private var isActive = true
-    private  val client = HttpClient(CIO)
+    private val client = HttpClient(CIO)
     private var _weatherInfo = MutableStateFlow(WeatherInfo())
     val weatherInfo = _weatherInfo.asStateFlow()
-    private  var _isConnected = MutableStateFlow(false)
-     val isConnected = _isConnected.asStateFlow()
+    private var _isConnected = MutableStateFlow(false)
+    val isConnected = _isConnected.asStateFlow()
     private var _isSI = MutableStateFlow(true)
-     val isSi = _isSI.asStateFlow()
+    val isSi = _isSI.asStateFlow()
     private var _savedProvider = MutableStateFlow(
         DEFAULT_STATION
     )
     val savedProvider = _savedProvider.asStateFlow()
 
     init {
-            //Do your database's operations here
-            viewModelScope.launch {
-                // it needs context otherwise room trows   Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
-                withContext(Dispatchers.IO) {
-                    savedProvidersDao.insertAll(
-                        DEFAULT_STATION
-                    )
-                    val addresses = savedProvidersDao.getAll()
+        //Do your database's operations here
+        viewModelScope.launch {
+            // it needs context otherwise room trows   Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
+            withContext(Dispatchers.IO) {
+                savedProvidersDao.insertAll(
+                    DEFAULT_STATION
+                )
+                val addresses = savedProvidersDao.getAll()
 
-                    Log.d("db", addresses.toString())
-                    _savedProvider.value = addresses[0] // Todo error handling
+                Log.d("db", addresses.toString())
+                _savedProvider.value = addresses[0]
 
-                    fetchWeatherInfo(savedProvider.value.url)
-                }
+                fetchWeatherInfo(savedProvider.value.url)
             }
+        }
     }
 
     fun selectSi() {
         _isSI.value = true
     }
 
-   fun selectImperial() {
+    fun selectImperial() {
         _isSI.value = false
     }
 
-    fun getProviders(context: Context? = null): List<SavedProviders>? {
+    fun getProviders(): List<SavedProviders>? {
         var providers: List<SavedProviders>? = null
         viewModelScope.launch {
 
@@ -86,7 +86,7 @@ class WeatherStationViewModel @Inject constructor (private val savedProvidersDao
         return providers
     }
 
-    private  suspend fun fetchWeatherInfo(url: String) {
+    private suspend fun fetchWeatherInfo(url: String) {
         _weatherInfo.value = WeatherInfo()
         _isConnected.value = false
         var isConnected = false

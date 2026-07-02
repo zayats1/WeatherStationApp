@@ -29,13 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
@@ -83,7 +81,7 @@ fun SettingsPreview() {
 @Composable
 fun SelectUnits(
     modifier: Modifier = Modifier,
-    model: WeatherStationViewModel =  hiltViewModel() // for preview
+    model: WeatherStationViewModel = hiltViewModel() // for preview
 ) {
     val isSi by model.isSi.collectAsStateWithLifecycle()
     DisplayBar(modifier = modifier) {
@@ -192,11 +190,11 @@ fun GoBack(modifier: Modifier = Modifier, navController: NavController = remembe
 @Composable
 fun ConnectionInfo(
     modifier: Modifier = Modifier,
-    model: WeatherStationViewModel =  hiltViewModel(),
+    model: WeatherStationViewModel = hiltViewModel(),
 ) {
     val provider = model.savedProvider.collectAsStateWithLifecycle().value
     var isMenuExpanded by remember { mutableStateOf(false) }
-    val providers= model.getProviders(LocalContext.current)
+    val providers = model.getProviders()
     DisplayBar(modifier = modifier) {
         Column {
             Text(
@@ -211,7 +209,7 @@ fun ConnectionInfo(
         IconButton(onClick = { isMenuExpanded = true }) {
             Icon(Icons.Default.MoreVert, contentDescription = "More options")
         }
-        providers?.let { it ->
+        providers?.let {
             Log.d("Connection Info", it.toString())
             ProvidersMenu(
                 modifier = modifier,
@@ -239,7 +237,7 @@ fun ProvidersMenu(
     ) {
         urls.forEach { option ->
             DropdownMenuItem(
-                text = { Text(option.url.toString()) },
+                text = { Text(option.url) },
                 onClick = { /* Do something... */ }
             )
 
