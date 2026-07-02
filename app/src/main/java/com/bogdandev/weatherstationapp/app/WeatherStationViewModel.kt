@@ -1,11 +1,12 @@
 package com.bogdandev.weatherstationapp.app
 
+import com.bogdandev.weatherstationapp.data.SavedProvidersDao
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bogdandev.weatherstationapp.data.DBBuilder
 import com.bogdandev.weatherstationapp.data.SavedProviders
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.network.sockets.ConnectTimeoutException
@@ -14,14 +15,18 @@ import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.net.ConnectException
 import java.net.SocketException
+import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 const val TIMEOUT_MS: Long = 1000L
 const val REQUEST_INTERVAL_MS: Long = 100L
@@ -29,73 +34,59 @@ val DEFAULT_STATION: SavedProviders = SavedProviders(
     url = "http://192.168.1.1"
 )
 
-class WeatherStationViewModel(context: Context? = null) : ViewModel() {
+@HiltViewModel
+class WeatherStationViewModel @Inject constructor (private val savedProvidersDao: SavedProvidersDao) : ViewModel() {
     private var isActive = true
-    private val client = HttpClient(CIO)
+    private  val client = HttpClient(CIO)
     private var _weatherInfo = MutableStateFlow(WeatherInfo())
     val weatherInfo = _weatherInfo.asStateFlow()
-    private var _isConnected = MutableStateFlow(false)
-    val isConnected = _isConnected.asStateFlow()
+    private  var _isConnected = MutableStateFlow(false)
+     val isConnected = _isConnected.asStateFlow()
     private var _isSI = MutableStateFlow(true)
-    val isSi = _isSI.asStateFlow()
+     val isSi = _isSI.asStateFlow()
     private var _savedProvider = MutableStateFlow(
         DEFAULT_STATION
     )
     val savedProvider = _savedProvider.asStateFlow()
 
     init {
-        val thread = Thread {
             //Do your database's operations here
-            val db = context.let { DBBuilder.getInstance(it) }
-            if (db.isOpen) {
-                db.savedIPDao.insertAll(
-                    DEFAULT_STATION
-                )
-                val addresses =   db.savedIPDao.getAll()
+            viewModelScope.launch {
+                // it needs context otherwise room trows   Cannot access database on the main thread since it may potentially lock the UI for a long period of time.
+                withContext(Dispatchers.IO) {
+                    savedProvidersDao.insertAll(
+                        DEFAULT_STATION
+                    )
+                    val addresses = savedProvidersDao.getAll()
 
-                Log.d("db", addresses.toString())
-                _savedProvider.value = addresses[0] // Todo error handling
-                db.close()
+                    Log.d("db", addresses.toString())
+                    _savedProvider.value = addresses[0] // Todo error handling
+
+                    fetchWeatherInfo(savedProvider.value.url)
+                }
             }
-
-        }
-        thread.start()
-        thread.join()
-        viewModelScope.launch {
-            fetchWeatherInfo(savedProvider.value.url)
-        }
     }
 
     fun selectSi() {
         _isSI.value = true
     }
 
-    fun selectImperial() {
+   fun selectImperial() {
         _isSI.value = false
     }
 
     fun getProviders(context: Context? = null): List<SavedProviders>? {
         var providers: List<SavedProviders>? = null
-        val thread = Thread {
-            //Do your database's operations here
-            val db = context?.let { DBBuilder.getInstance(it) }
-            if (db?.isOpen == true) {
-                db.savedIPDao.insertAll(
-                    DEFAULT_STATION
-                )
-                providers = db.savedIPDao.getAll()
-                Log.d("db", providers.toString())
-                // Todo error handling
+        viewModelScope.launch {
 
-                db.close()
+            withContext(Dispatchers.IO) {
+                providers = savedProvidersDao.getAll()
             }
         }
-        thread.start()
-        thread.join()
         return providers
     }
 
-    private suspend fun fetchWeatherInfo(url: String) {
+    private  suspend fun fetchWeatherInfo(url: String) {
         _weatherInfo.value = WeatherInfo()
         _isConnected.value = false
         var isConnected = false
@@ -152,7 +143,7 @@ class WeatherStationViewModel(context: Context? = null) : ViewModel() {
                 Log.e("fetchWeatherInfo", e.toString())
                 isConnected = false
             } finally {
-                delay(REQUEST_INTERVAL_MS)
+                delay(REQUEST_INTERVAL_MS.milliseconds)
                 _isConnected.value = isConnected
             }
         }

@@ -25,20 +25,39 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
+import com.bogdandev.weatherstationapp.app.WeatherInfo
 import com.bogdandev.weatherstationapp.app.WeatherStationViewModel
 import java.util.Calendar
 import java.util.Date
 
 
 @Composable
-fun Weather(
-    modifier: Modifier = Modifier,
-    model: WeatherStationViewModel = WeatherStationViewModel(),
-    navController: NavController = rememberNavController(),
-) {
+fun MainScreen( modifier: Modifier = Modifier,
+                model: WeatherStationViewModel,
+                navController: NavController = rememberNavController(),
+){
     val weatherInfo by model.weatherInfo.collectAsStateWithLifecycle()
     val isConnected by model.isConnected.collectAsStateWithLifecycle()
     val isSi by model.isSi.collectAsStateWithLifecycle()
+    Weather(
+        modifier,
+     weatherInfo,
+    isConnected,
+        isSi,
+        navController
+    )
+
+}
+
+@Composable
+fun Weather(
+    modifier: Modifier,
+    weatherInfo: WeatherInfo,
+    isSi: Boolean,
+    isConnected: Boolean,
+    navController: NavController = rememberNavController(),
+) {
+
     val (info, tempUnit, pressureUnit) = if (isSi) {
         Triple(weatherInfo, "*C", "kPa")
     } else {
@@ -148,6 +167,7 @@ fun NetworkStatus(modifier: Modifier = Modifier, isConnected: Boolean = false) {
 
 
 @Preview(showBackground = true)
+
 @Composable
 fun WeatherPreview() {
     Surface(
@@ -157,7 +177,14 @@ fun WeatherPreview() {
             .width(1080.dp)
     ) {
         Weather(
-            modifier = Modifier
+            modifier = Modifier,
+            isSi = true,
+            isConnected = true,
+            weatherInfo = WeatherInfo(
+                temperature = 36.6,
+                pressure = 101.3,
+                humidity = 70.0,
+            )
         )
     }
 }
@@ -251,8 +278,4 @@ fun PressureBar(modifier: Modifier = Modifier, pressure: String = "0kPa") {
         )
     }
 }
-
-
-
-
 

@@ -1,6 +1,5 @@
 package com.bogdandev.weatherstationapp.data
 
-import SavedProvidersDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
@@ -9,5 +8,5 @@ import androidx.room.RoomDatabase
     version = 1
 )
 abstract class WeatherStationIPDB : RoomDatabase() {
-    abstract val savedIPDao: SavedProvidersDao
+    abstract val savedProvidersDao: SavedProvidersDao
 }

@@ -6,17 +6,18 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.2.0"
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 
 }
 
 android {
     namespace = "com.bogdandev.weatherstationapp"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.bogdandev.weatherstationapp"
         minSdk = 31
-        targetSdk = 36
+        targetSdk = 37
 
         versionCode = 1
         versionName = "1.0"
@@ -50,6 +51,10 @@ android {
 
 dependencies {
 
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+
     implementation(libs.androidx.room.runtime)
 
     // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
@@ -76,7 +81,6 @@ dependencies {
     implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
-    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -85,4 +89,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
+    implementation(libs.androidx.compose.material.icons.extended)
 }

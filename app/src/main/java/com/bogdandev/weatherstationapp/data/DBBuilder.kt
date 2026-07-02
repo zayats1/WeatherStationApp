@@ -2,13 +2,16 @@ package com.bogdandev.weatherstationapp.data
 
 import android.content.Context
 import androidx.room.Room
+import kotlin.concurrent.Volatile
 
 object DBBuilder {
+    @Volatile
     private var INSTANCE: WeatherStationIPDB? = null
-    fun getInstance(context: Context?): WeatherStationIPDB {
+
+    fun getInstance(context: Context): WeatherStationIPDB {
         if (INSTANCE == null) {
             synchronized(WeatherStationIPDB::class) {
-                INSTANCE = context?.let { buildRoomDB(it) }
+                INSTANCE =  buildRoomDB(context)
             }
         }
         return INSTANCE!!

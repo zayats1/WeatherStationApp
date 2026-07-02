@@ -33,7 +33,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.bogdandev.weatherstationapp.R
@@ -43,7 +45,7 @@ import com.bogdandev.weatherstationapp.data.SavedProviders
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreen(
-    modifier: Modifier = Modifier, model: WeatherStationViewModel = WeatherStationViewModel(),
+    modifier: Modifier = Modifier, model: WeatherStationViewModel = hiltViewModel(),
     navController: NavController = rememberNavController()
 ) {
     Surface(modifier) {
@@ -81,7 +83,7 @@ fun SettingsPreview() {
 @Composable
 fun SelectUnits(
     modifier: Modifier = Modifier,
-    model: WeatherStationViewModel = WeatherStationViewModel()
+    model: WeatherStationViewModel =  hiltViewModel() // for preview
 ) {
     val isSi by model.isSi.collectAsStateWithLifecycle()
     DisplayBar(modifier = modifier) {
@@ -190,7 +192,7 @@ fun GoBack(modifier: Modifier = Modifier, navController: NavController = remembe
 @Composable
 fun ConnectionInfo(
     modifier: Modifier = Modifier,
-    model: WeatherStationViewModel = WeatherStationViewModel(),
+    model: WeatherStationViewModel =  hiltViewModel(),
 ) {
     val provider = model.savedProvider.collectAsStateWithLifecycle().value
     var isMenuExpanded by remember { mutableStateOf(false) }
