@@ -43,8 +43,8 @@ fun MainScreen(
     Weather(
         modifier,
         weatherInfo,
-        isConnected,
         isSi,
+        isConnected,
         navController
     )
 
