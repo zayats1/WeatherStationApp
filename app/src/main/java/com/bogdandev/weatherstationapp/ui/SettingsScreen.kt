@@ -144,46 +144,6 @@ fun SelectUnits(
 }
 
 
-@Preview
-@Composable
-fun GoBack(modifier: Modifier = Modifier, navController: NavController = rememberNavController()) {
-    DisplayBar(modifier = modifier) {
-        Text(
-            text = "Return!",
-            modifier = modifier.padding(start = 10.dp, end = 20.dp)
-        )
-        Button(
-            onClick = {
-                navController.navigate(Screen.MAIN.toString())
-            },
-            modifier = modifier
-                .size(150.dp)
-                .padding(end = 2.dp)
-                .clip(CircleShape),
-            colors = ButtonColors(
-                contentColor = Color.Magenta,
-                disabledContainerColor = Color.Transparent,
-                disabledContentColor = Color.Transparent,
-                containerColor = Color.Transparent,
-            ),
-
-            ) {
-            Image(
-                painter = painterResource(
-                    R.drawable.sun_foreground
-                ),
-                modifier = modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .background(Color.Blue)
-                    .padding(end = 2.dp),
-
-
-                contentDescription = null
-            )
-        }
-    }
-}
 
 
 @Preview

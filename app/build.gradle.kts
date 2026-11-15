@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.bogdandev.weatherstationapp"
-        minSdk = 31
+        minSdk = 33
         targetSdk = 37
 
         versionCode = 1

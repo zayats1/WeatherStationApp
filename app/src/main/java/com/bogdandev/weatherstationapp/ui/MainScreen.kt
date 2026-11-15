@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bluetooth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -129,6 +132,27 @@ fun Settings(
                     R.drawable.settings_foreground
                 ),
                 contentDescription = null
+            )
+        }
+        Button(
+            modifier = modifier
+                .size(150.dp)
+                .padding(end = 2.dp)
+                .clip(CircleShape),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Blue,
+                disabledContainerColor = Color.Transparent,
+                disabledContentColor = Color.Transparent,
+            ),
+            onClick = {
+                navController.navigate(Screen.BLUETOOTH_SCREEN.toString())
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Bluetooth,
+                contentDescription = "Bluetooth",
+                modifier = Modifier.size(48.dp),
             )
         }
     }
